@@ -1,0 +1,33 @@
+	ScopeTable# 1 created
+Cmd 1: I a VAR
+	Inserted in ScopeTable# 1 at position 2, 1
+Cmd 2: I b VAR
+	Inserted in ScopeTable# 1 at position 3, 1
+Cmd 3: I c VAR
+	Inserted in ScopeTable# 1 at position 1, 1
+Cmd 4: I d VAR
+	Inserted in ScopeTable# 1 at position 2, 2
+	Rehashing ScopeTable# 1: bucket size increased from 3 to 6
+Cmd 5: I e VAR
+	Inserted in ScopeTable# 1 at position 6, 1
+Cmd 6: I f VAR
+	Inserted in ScopeTable# 1 at position 1, 1
+Cmd 7: I g VAR
+	Inserted in ScopeTable# 1 at position 2, 2
+	Rehashing ScopeTable# 1: bucket size increased from 6 to 12
+Cmd 8: P C
+	ScopeTable# 1
+	1--> 
+	2--> <a,VAR> 
+	3--> <b,VAR> 
+	4--> <c,VAR> 
+	5--> <d,VAR> 
+	6--> <e,VAR> 
+	7--> <f,VAR> 
+	8--> <g,VAR> 
+	9--> 
+	10--> 
+	11--> 
+	12--> 
+Cmd 9: Q
+	ScopeTable# 1 removed

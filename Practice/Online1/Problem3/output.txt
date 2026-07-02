@@ -1,0 +1,23 @@
+	ScopeTable# 1 created
+Cmd 1: I x VAR
+	Inserted in ScopeTable# 1 at position 1, 1
+Cmd 2: S
+	ScopeTable# 2 created
+Cmd 3: I x VAR
+	Inserted in ScopeTable# 2 at position 1, 1
+Cmd 4: S
+	ScopeTable# 3 created
+Cmd 5: I y VAR
+	Inserted in ScopeTable# 3 at position 2, 1
+Cmd 6: I x VAR
+	Inserted in ScopeTable# 3 at position 1, 1
+Cmd 7: F x
+	'x' found in ScopeTable# 3 at position 1, 1
+	'x' found in ScopeTable# 2 at position 1, 1
+	'x' found in ScopeTable# 1 at position 1, 1
+Cmd 8: F z
+	'z' not found in any of the ScopeTables
+Cmd 9: Q
+	ScopeTable# 3 removed
+	ScopeTable# 2 removed
+	ScopeTable# 1 removed

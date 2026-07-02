@@ -1,0 +1,10 @@
+4
+I x VAR
+S
+I x VAR
+S
+I y VAR
+I x VAR
+F x
+F z
+Q

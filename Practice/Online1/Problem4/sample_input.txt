@@ -1,0 +1,11 @@
+5
+I x VAR
+S
+I x VAR
+S
+I x VAR
+G x y
+G x
+P A
+G y
+Q

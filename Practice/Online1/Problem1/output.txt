@@ -1,0 +1,20 @@
+	ScopeTable# 1 created
+Cmd 1: I a VAR
+	Inserted in ScopeTable# 1 at position 2, 1
+Cmd 2: I b VAR
+	Inserted in ScopeTable# 1 at position 3, 1
+Cmd 3: N x
+	Number of parameters mismatch for the command N
+Cmd 4: N
+	Current ScopeTable# 1 contains 2 symbol(s)
+	Total visible symbols (including outer scopes): 2
+Cmd 5: S
+	ScopeTable# 2 created
+Cmd 6: I c VAR
+	Inserted in ScopeTable# 2 at position 4, 1
+Cmd 7: N
+	Current ScopeTable# 2 contains 1 symbol(s)
+	Total visible symbols (including outer scopes): 3
+Cmd 8: Q
+	ScopeTable# 2 removed
+	ScopeTable# 1 removed

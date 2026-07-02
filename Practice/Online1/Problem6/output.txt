@@ -1,0 +1,22 @@
+	ScopeTable# 1 created
+Cmd 1: I a VAR
+	Inserted in ScopeTable# 1 at position 2, 1
+Cmd 2: I b VAR
+	Inserted in ScopeTable# 1 at position 3, 1
+Cmd 3: S
+	ScopeTable# 2 created
+Cmd 4: I b VAR
+	Inserted in ScopeTable# 2 at position 3, 1
+Cmd 5: I c VAR
+	Inserted in ScopeTable# 2 at position 1, 1
+Cmd 6: M
+	Inserted in ScopeTable# 1 at position 1, 1
+	'b' already exists in ScopeTable# 1
+	ScopeTable# 2 merged into ScopeTable# 1
+Cmd 7: P C
+	ScopeTable# 1
+	1--> <c,VAR> 
+	2--> <a,VAR> 
+	3--> <b,VAR> 
+Cmd 8: Q
+	ScopeTable# 1 removed
