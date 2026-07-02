@@ -13,7 +13,7 @@ ARG2=$2
 
 # 2. Compile the C++ project
 echo "Compiling project..."
-g++ 2205014.cpp -o 2205014
+g++ -fsanitize=address -g 2205014.cpp -o 2205014
 
 # Check if compilation was successful
 if [ $? -eq 0 ]; then

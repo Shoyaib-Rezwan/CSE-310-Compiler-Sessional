@@ -57,20 +57,23 @@ void handleCommands(int bucketSize, SymbolTable *symbolTable)
                     type.append(temp);
                     type.append(",");
                 }
-                type.pop_back();
+                if (*(type.end() - 1) == ',')
+                    type.pop_back();
                 type.append(")");
             }
             else if (type == "STRUCT" || type == "UNION")
             {
                 type.append(",{");
                 string temp1 = "", temp2 = "";
+                bool invalid = false; // invalid tracks whether variable and their type comes in pair
                 while (stream >> temp1)
                 {
                     if (!(stream >> temp2))
                     {
                         cout << "\tEvery Struct or Union member must be specified with their type\n";
                         cmdNo++;
-                        continue;
+                        invalid = true;
+                        break;
                     }
                     type.append("(");
                     type.append(temp1);
@@ -78,6 +81,8 @@ void handleCommands(int bucketSize, SymbolTable *symbolTable)
                     type.append(temp2);
                     type.append("),");
                 }
+                if (invalid)
+                    continue;
                 if (*(type.end() - 1) == ',')
                     type.pop_back();
                 type.append("}");

@@ -52,6 +52,7 @@ public:
                 current = next;
             }
         }
+        delete[] buckets;
     }
 
     bool insert(const string key, const string type)
@@ -114,7 +115,7 @@ public:
                 if (prev != nullptr)
                     prev->setNext(current->getNext());
                 else
-                    buckets[bucket] = nullptr;
+                    buckets[bucket] = current->getNext();
                 delete current;
                 deleted=true;
                 break;
