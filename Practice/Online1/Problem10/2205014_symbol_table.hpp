@@ -97,20 +97,54 @@ public:
         else
             return current->getUniqueNumber();
     }
-    void generateWarning(string const key)
+    void split(const string type)
     {
         if (current == nullptr)
             return;
-        ScopeTable *temp = current->getParent();
-        while (temp != nullptr)
+        SymbolInfo **buckets = current->getBuckets();
+        ScopeTable *newTable = nullptr;
+        int bucket = current->getBucketSize();
+        bool found = false;
+        for (int i = 0; i < bucket; i++)
         {
-            unsigned int bucket;
-            int position, uniqueNumber;
-            if (temp->lookUp(key, bucket, position, uniqueNumber))
+            SymbolInfo *temp = buckets[i];
+            while (temp != nullptr)
             {
-                cout << "\tWarning: '" << key << "' shadows a declaration in ScopeTable# " << uniqueNumber << " at position " << bucket << ", " << position << "\n";
+                if (temp->getType() == type)
+                {
+                    if (!found)
+                    {
+                        found = true;
+                        newTable = new ScopeTable(bucket, uniqueNumber++, current);
+                        cout << "ScopeTable# " << uniqueNumber - 1 << "created via selective split\n";
+                    }
+                    SymbolInfo **newBuckets = newTable->getBuckets();
+                    int BucketNo = HashFunction::SDBMHash(temp->getName(), bucket);
+                    if (newBuckets[BucketNo] == nullptr)
+                    {
+                        newBuckets[BucketNo] = new SymbolInfo(temp->getName(), type);
+                        cout << "\tMoved '" << temp->getName() << "' to ScopeTable# " << uniqueNumber - 1 << " at position " << BucketNo + 1 << ", " << 1 << "\n";
+                    }
+                    else
+                    {
+                        int position = 2;
+                        SymbolInfo *temp2 = newBuckets[BucketNo];
+                        while (temp2->getNext() != nullptr)
+                        {
+                            temp2 = temp2->getNext();
+                            position++;
+                        }
+                        temp2->setNext(new SymbolInfo(temp->getName(), type));
+                        newBuckets[BucketNo] = new SymbolInfo(temp->getName(), type);
+                        cout << "\tMoved '" << temp->getName() << "' to ScopeTable# " << uniqueNumber - 1 << " at position " << BucketNo + 1 << ", " << position << "\n";
+                    }
+                }
+                temp = temp->getNext();
             }
-            temp = temp->getParent();
+        }
+        if(found)
+        {
+            current=newTable;
         }
     }
 };

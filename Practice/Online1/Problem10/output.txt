@@ -1,0 +1,23 @@
+	ScopeTable# 1 created
+Cmd 1: I a VAR
+	Inserted in ScopeTable# 1 at position 2, 1
+Cmd 2: I b FUNC
+	Inserted in ScopeTable# 1 at position 3, 1
+Cmd 3: I c VAR
+	Inserted in ScopeTable# 1 at position 1, 1
+Cmd 4: X VAR
+ScopeTable# 2created via selective split
+	Moved 'c' to ScopeTable# 2 at position 1, 1
+	Moved 'a' to ScopeTable# 2 at position 2, 1
+Cmd 5: P A
+	ScopeTable# 2
+	1--> <c,VAR> 
+	2--> <a,VAR> 
+	3--> 
+		ScopeTable# 1
+		1--> <c,VAR> 
+		2--> <a,VAR> 
+		3--> <b,FUNC> 
+Cmd 6: Q
+	ScopeTable# 2 removed
+	ScopeTable# 1 removed

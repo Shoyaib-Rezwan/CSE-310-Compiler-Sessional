@@ -1,0 +1,19 @@
+	ScopeTable# 1 created
+Cmd 1: I x VAR
+	Inserted in ScopeTable# 1 at position 1, 1
+Cmd 2: I y VAR
+	Inserted in ScopeTable# 1 at position 2, 1
+Cmd 3: R x z
+	'x' renamed to 'z' and rehashed into bucket 3
+Cmd 4: R w k
+	'w' not found in the current ScopeTable
+Cmd 5: R y z
+	Rename failed: 'z' already exists in the current ScopeTable
+Cmd 6: P C
+	ScopeTable# 1
+	1-->
+	2--> <y,VAR>
+	3--> <z,VAR>
+	4-->
+Cmd 7: Q
+	ScopeTable# 1 removed

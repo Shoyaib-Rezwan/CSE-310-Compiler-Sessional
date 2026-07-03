@@ -14,7 +14,7 @@ void handleCommands(int bucketSize, SymbolTable *symbolTable)
         stream >> cmd;
 
         // skip commands that are invalid
-        if (!(cmd == "I" || cmd == "L" || cmd == "S" || cmd == "E" || cmd == "Q" || cmd == "P" || cmd == "D"))
+        if (!(cmd == "I" || cmd == "L" || cmd == "S" || cmd == "E" || cmd == "Q" || cmd == "P" || cmd == "D" || cmd == "X"))
         {
             continue;
         }
@@ -99,8 +99,6 @@ void handleCommands(int bucketSize, SymbolTable *symbolTable)
             }
             if (!symbolTable->insert(key, type))
                 cout << "\t'" << key << "' already exists in the current ScopeTable\n";
-            else
-                symbolTable->generateWarning(key);
         }
 
         else if (cmd == "P")
@@ -187,6 +185,16 @@ void handleCommands(int bucketSize, SymbolTable *symbolTable)
             return;
         }
 
+        else if (cmd == "X")
+        {
+            if (!(stream >> type) || stream >> key)
+            {
+                cout << "\tNumber of parameters mismatch for the command X\n";
+                cmdNo++;
+                continue;
+            }
+            symbolTable->split(type);
+        }
         cmdNo++;
     }
 }

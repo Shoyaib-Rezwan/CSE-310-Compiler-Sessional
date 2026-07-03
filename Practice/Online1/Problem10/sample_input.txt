@@ -1,0 +1,7 @@
+3
+I a VAR
+I b FUNC
+I c VAR
+X VAR
+P A
+Q

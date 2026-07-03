@@ -1,55 +1,13 @@
-7
-I foo FUNCTION INT INT FLOAT INT
+3
 I i VAR
-L i
-L i j
-L j
+I i VAR
 S
-I 23 NUMBER
-I car STRUCT INT n_doors BOOL is_electric STRING brand
-I brand VAR
-P C
-D i
-D j
-E
+I i VAR
 S
-E
 S
-P A
-S
-I <= RELOP
-I == RELOP
-P A
-I >= RELOP
-P C
-I <= RELOP
-I foo STRUCT INT a FLOAT b
-P A
-D ==
-I foo VAR
-D 23
-D
-P A
-L 23
-S
-I x VAR
-I y VAR
-P A
-L foo
+I i VAR
+I i VAR
 E
-I num VAR
-I bicycle UNION INT n_gears BOOL is_hydrolic_brake STRING brand
-S
-I true BOOL
-L a
+I i VAR
 P A
-E
-E
-E
-E
-S
-P A
-P X
-M A
 Q
-P A

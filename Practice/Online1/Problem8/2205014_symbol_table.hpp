@@ -97,20 +97,64 @@ public:
         else
             return current->getUniqueNumber();
     }
-    void generateWarning(string const key)
+    void rename(const string oldKey, const string newKey)
     {
         if (current == nullptr)
             return;
-        ScopeTable *temp = current->getParent();
-        while (temp != nullptr)
+        unsigned int bucket;
+        int position, uniqueNumber;
+
+        SymbolInfo *pointer2 = current->lookUp(newKey, bucket, position, uniqueNumber);
+        if (pointer2 != nullptr)
         {
-            unsigned int bucket;
-            int position, uniqueNumber;
-            if (temp->lookUp(key, bucket, position, uniqueNumber))
-            {
-                cout << "\tWarning: '" << key << "' shadows a declaration in ScopeTable# " << uniqueNumber << " at position " << bucket << ", " << position << "\n";
-            }
-            temp = temp->getParent();
+            cout << "\tRename failed: '" << newKey << "' already exists in the current ScopeTable\n";
+            return;
         }
+
+        SymbolInfo *pointer = current->lookUp(oldKey, bucket, position, uniqueNumber);
+        if (pointer == nullptr)
+        {
+            cout << "\t'" << oldKey << "' not found in the current ScopeTable\n";
+            return;
+        }
+
+        SymbolInfo **buckets = current->getBuckets();
+
+        SymbolInfo *temp = buckets[bucket - 1];
+        if (temp == pointer)
+        {
+            buckets[bucket - 1] = temp->getNext();
+        }
+        else
+        {
+            while (temp->getNext() != pointer)
+            {
+                temp = temp->getNext();
+            }
+            temp->setNext(pointer->getNext());
+        }
+
+        pointer->setNext(nullptr);
+
+        pointer->setName(newKey);
+
+        bucket = HashFunction::SDBMHash(newKey, current->getBucketSize());
+
+        temp = buckets[bucket];
+
+        if (temp == nullptr)
+        {
+            buckets[bucket] = pointer;
+        }
+        else
+        {
+            while (temp->getNext())
+            {
+                temp = temp->getNext();
+            }
+
+            temp->setNext(pointer);
+        }
+        cout << "\t'" << oldKey << "' renamed to '" << newKey << "' and rehashed into bucket " << bucket + 1 << "\n";
     }
 };
