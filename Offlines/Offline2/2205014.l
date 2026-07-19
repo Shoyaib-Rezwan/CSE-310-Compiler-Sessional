@@ -1,6 +1,9 @@
 %option noyywrap
 
 %x CONST_CHAR_TOKENIZER
+%x STRING_TOKENIZER
+%x SINGLE_LINE_COMMENT_TOKENIZER
+%X MULTI_LINE_COMMENT_TOKENIZER
 
 %{
 
@@ -12,6 +15,9 @@ ofstream tokenofs("2205014_token.txt");
 ofstream logofs("2205014_log.txt");
 SymbolTable *symbolTable;
 string curr_char_str;
+string curr_scanned_str;
+string curr_replaced_str;
+bool back_slash_encounter;
 
 struct TokenDetails
 {
@@ -98,16 +104,22 @@ TokenDetails *generateCONST_CHARToken()
     char ch = getActualCharacter();
     string lexeme;
     lexeme.resize(1);
-    lexeme[0]=ch;
+    lexeme[0] = ch;
     return new TokenDetails("CONST_CHAR", lexeme);
 }
 
 void handleFileWriting(TokenDetails *tokenDetails)
 {
     // token writing
+    if(tokenDetails->tokenName!="COMMENT")
     tokenofs << tokenDetails->token << " ";
 
     // log writing
+    if (tokenDetails->tokenName == "STRING")
+    {
+        logofs << "Line no " << lineCount << ": Token <" << tokenDetails->tokenName << "> Lexeme " << curr_scanned_str << " found--> " << tokenDetails->token<<"\n\n";
+        return;
+    }
     logofs << "Line no " << lineCount << ": Token <" << tokenDetails->tokenName << "> Lexeme " << tokenDetails->lexeme << " found\n\n";
 
     // handle special cases manually
@@ -165,6 +177,16 @@ CONST_FLOAT [0-9]*\.{CONST_INT}(E[+-]?{CONST_INT})?|{CONST_INT}E[+-]?{CONST_INT}
 
 SINGLE_QUOTE "\'"
 
+DOUBLE_QUOTE "\""
+
+DOUBLE_FORWARD_SLASH "//"
+
+FORWARD_SLASH_STAR "/*"
+
+STAR_FORWARD_SLASH "*/"
+
+IGNORE_ESCAPES "\\"|"\n"
+
 %%
 {WHITESPACE} {} 
 
@@ -218,6 +240,81 @@ handleFileWriting(generateCONST_CHARToken());
 BEGIN INITIAL;}
 
 . {curr_char_str+=yytext;}
+}
+
+{DOUBLE_QUOTE} {
+    curr_scanned_str="";
+    curr_replaced_str="";
+    back_slash_encounter=false;
+    BEGIN STRING_TOKENIZER;
+}
+
+<STRING_TOKENIZER>{
+
+{DOUBLE_QUOTE} {
+    if(back_slash_encounter)
+    {
+        curr_scanned_str+=yytext;
+        curr_replaced_str+=yytext;
+        back_slash_encounter=false;
+    }
+    else{
+    handleFileWriting(new TokenDetails("STRING", curr_replaced_str));
+    BEGIN INITIAL;
+    }
+}
+
+{IGNORE_ESCAPES} {curr_scanned_str+=yytext;
+if(yytext[0]=='\\')
+back_slash_encounter=true;
+else
+back_slash_encounter=false;
+if(yytext[0]=='\n')
+lineCount++;
+}
+
+. {curr_scanned_str+=yytext; curr_replaced_str+=yytext; back_slash_encounter=false;}
+}
+
+{DOUBLE_FORWARD_SLASH} {
+    back_slash_encounter=false;
+    curr_scanned_str="//";
+    BEGIN SINGLE_LINE_COMMENT_TOKENIZER;
+} 
+
+<SINGLE_LINE_COMMENT_TOKENIZER>{
+
+"\\" {back_slash_encounter=true;curr_scanned_str+=yytext;}
+
+"\n" {
+    if(back_slash_encounter)
+    {
+        curr_scanned_str+=yytext;
+        lineCount++;
+        back_slash_encounter=false;
+    }
+    else{
+        handleFileWriting(new TokenDetails("COMMENT", curr_scanned_str));
+        BEGIN INITIAL;
+    }
+}
+. {curr_scanned_str+=yytext; back_slash_encounter=false;}
+
+}
+
+{FORWARD_SLASH_STAR} {
+    curr_scanned_str="/*";
+    BEGIN MULTI_LINE_COMMENT_TOKENIZER;
+}
+
+<MULTI_LINE_COMMENT_TOKENIZER>{
+
+{STAR_FORWARD_SLASH} { curr_scanned_str+=yytext; handleFileWriting(new TokenDetails("COMMENT", curr_scanned_str));
+BEGIN INITIAL;
+}
+
+. {curr_scanned_str+=yytext;}
+
 }
 
 [\n] {lineCount++;}

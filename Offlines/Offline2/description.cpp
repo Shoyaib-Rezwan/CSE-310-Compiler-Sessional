@@ -6,6 +6,9 @@ ofstream tokenofs("2205014_token.txt");
 ofstream logofs("2205014_log.txt");
 SymbolTable *symbolTable;
 string curr_char_str;
+string curr_scanned_str;
+string curr_replaced_str;
+bool back_slash_encounter;
 
 struct TokenDetails
 {
@@ -90,7 +93,9 @@ char getActualCharacter(string str = curr_char_str)
 TokenDetails *generateCONST_CHARToken()
 {
     char ch = getActualCharacter();
-    string lexeme = "" + ch;
+    string lexeme;
+    lexeme.resize(1);
+    lexeme[0] = ch;
     return new TokenDetails("CONST_CHAR", lexeme);
 }
 
@@ -100,6 +105,11 @@ void handleFileWriting(TokenDetails *tokenDetails)
     tokenofs << tokenDetails->token << " ";
 
     // log writing
+    if (tokenDetails->tokenName == "STRING")
+    {
+        logofs << "Line no " << lineCount << ": Token <" << tokenDetails->tokenName << "> Lexeme " << curr_scanned_str << " found--> " << tokenDetails->token << "\n\n";
+        return;
+    }
     logofs << "Line no " << lineCount << ": Token <" << tokenDetails->tokenName << "> Lexeme " << tokenDetails->lexeme << " found\n\n";
 
     // handle special cases manually
