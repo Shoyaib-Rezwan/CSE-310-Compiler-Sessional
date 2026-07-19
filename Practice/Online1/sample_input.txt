@@ -1,0 +1,9 @@
+4
+I a VAR
+I b VAR
+N x
+N
+S
+I c VAR
+N
+Q

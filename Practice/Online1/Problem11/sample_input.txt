@@ -1,0 +1,11 @@
+3
+I x GLOBAL_VAR
+S
+I y LOCAL_VAR
+I x LOCAL_SHADOW
+S
+I z DEEP_VAR
+O z
+O y
+O x
+Q

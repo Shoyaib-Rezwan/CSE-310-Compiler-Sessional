@@ -1,0 +1,12 @@
+int main()
+{
+    char ch ='\r';
+    float d = 4.5;
+    float d = 4.5E9;
+    float d = 4.5E-9;
+    float d = 4.5E+9;
+    float d = .5;
+    float d = 5689E89;
+    float d = 5689E89.96;
+
+}

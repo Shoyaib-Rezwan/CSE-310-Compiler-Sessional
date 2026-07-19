@@ -1,0 +1,21 @@
+	ScopeTable# 1 created
+Cmd 1: I x GLOBAL_VAR
+	Inserted in ScopeTable# 1 at position 1, 1
+Cmd 2: S
+	ScopeTable# 2 created
+Cmd 3: I y LOCAL_VAR
+	Inserted in ScopeTable# 2 at position 2, 1
+Cmd 4: I x LOCAL_SHADOW
+	Inserted in ScopeTable# 2 at position 1, 1
+Cmd 5: S
+	ScopeTable# 3 created
+Cmd 6: I z DEEP_VAR
+	Inserted in ScopeTable# 3 at position 3, 1
+Cmd 7: O z
+	Promoted 'z' from ScopeTable# 3 to global ScopeTable# 1
+Cmd 8: O y
+	Promoted 'y' from ScopeTable# 2 to global ScopeTable# 1
+Cmd 9: O x
+	Promotion failed: 'x' already exists in the root ScopeTable
+Cmd 10: Q
+	ScopeTable# 3 removed
