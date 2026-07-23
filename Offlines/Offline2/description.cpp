@@ -1,7 +1,8 @@
 #include "headers/2205014_symbol_table.hpp"
 using namespace std;
 
-unsigned int lineCount = 1;
+unsigned int lineCount = 1, errorCount = 0;
+unsigned int tokenLineCount = 0; // counts lines of multiline string and comment
 ofstream tokenofs("2205014_token.txt");
 ofstream logofs("2205014_log.txt");
 SymbolTable *symbolTable;
@@ -10,6 +11,16 @@ string curr_scanned_str;
 string curr_replaced_str;
 bool back_slash_encounter;
 
+// error messages
+string errMsg1 = "Too many decimal points";
+string errMsg2 = "Ill formed number";
+string errMsg3 = "Invalid prefix on ID or invalid suffix on Number";
+string errMsg4 = "Multi character constant error";
+string errMsg5 = "Unterminated character";
+string errMsg6 = "Empty character constant error";
+string errMsg7 = "Unrecognized character";
+string errMsg8 = "Unterminated comment";
+string errMsg9 = "Unterminated string";
 struct TokenDetails
 {
     string tokenName, lexeme, token;
@@ -87,39 +98,72 @@ char getActualCharacter(string str = curr_char_str)
         return '\v';
     if (str == "\\0")
         return '\0';
+    if (str == "\\\"")
+        return '"';
     return str[0];
 }
 
 TokenDetails *generateCONST_CHARToken()
 {
     char ch = getActualCharacter();
-    string lexeme;
-    lexeme.resize(1);
-    lexeme[0] = ch;
-    return new TokenDetails("CONST_CHAR", lexeme);
+    string lexeme = "\'" + curr_char_str + "\'";
+    symbolTable->insert(lexeme, "CONST_CHAR");
+    TokenDetails *token = new TokenDetails("CONST_CHAR", lexeme);
+    token->token = "<" + token->tokenName + ", " + ch + ">";
+    return token;
 }
 
+TokenDetails *generateSTRINGToken()
+{
+    TokenDetails *tokenDetails = new TokenDetails("STRING", curr_scanned_str);
+    tokenDetails->token = "<" + tokenDetails->tokenName + ", " + curr_replaced_str + ">";
+    return tokenDetails;
+}
 void handleFileWriting(TokenDetails *tokenDetails)
 {
     // token writing
-    tokenofs << tokenDetails->token << " ";
+    if (tokenDetails->tokenName != "COMMENT")
+        tokenofs << tokenDetails->token << " ";
 
     // log writing
-    if (tokenDetails->tokenName == "STRING")
+    logofs << "Line no " << lineCount << ": Token <" << tokenDetails->tokenName << "> Lexeme " << tokenDetails->lexeme << " found";
+
+    if (tokenDetails->tokenName == "CONST_CHAR" || tokenDetails->tokenName == "STRING")
     {
-        logofs << "Line no " << lineCount << ": Token <" << tokenDetails->tokenName << "> Lexeme " << curr_scanned_str << " found--> " << tokenDetails->token << "\n\n";
-        return;
+        logofs << " --> " << tokenDetails->token;
     }
-    logofs << "Line no " << lineCount << ": Token <" << tokenDetails->tokenName << "> Lexeme " << tokenDetails->lexeme << " found\n\n";
+    logofs << "\n\n";
 
     // handle special cases manually
     if (tokenDetails->lexemeExist)
     {
         unsigned int bucket;
         int position, uniqueNumber;
-        symbolTable->lookUp(tokenDetails->lexeme, bucket, position, uniqueNumber);
+        string scopeNo="";
+        symbolTable->lookUp2(tokenDetails->lexeme, bucket, position, uniqueNumber, scopeNo);
         //< arr : ID > already exists in ScopeTable# 1.1 at position 6, 2
-        logofs << "< " << tokenDetails->lexeme << " : ID > already exists in ScopeTable# " << uniqueNumber << " at position " << bucket << ", " << position << "\n\n";
+        logofs << "< " << tokenDetails->lexeme << " : " << tokenDetails->tokenName << " > already exists in ScopeTable# " << scopeNo << " at position " << bucket << ", " << position << "\n\n";
+    }
+
+    // if the token doesn't exist and the lexeme was inserted inside the symbol table
+    //  then print the scope table
+    else if (tokenDetails->tokenName == "ID" || tokenDetails->tokenName == "CONST_INT" || tokenDetails->tokenName == "CONST_FLOAT" || tokenDetails->tokenName == "CONST_CHAR")
+    {
+        symbolTable->printAllScopes2(logofs);
+        logofs << "\n";
+    }
+}
+
+void handleErrorLogging(string errMsg, string lexeme, int spaceCount)
+{
+    errorCount++;
+    int errorLine = (tokenLineCount >= 1) ? lineCount - tokenLineCount + 1 : lineCount;
+    // only use the tokenLineCount whenever you are handling "multiline comment" and String errors
+    tokenLineCount = 0;
+    logofs << "Error at line no " << errorLine << ": " << errMsg << " " << lexeme << "\n";
+    for (int i = 0; i < spaceCount; i++)
+    {
+        logofs << "\n";
     }
 }
 
@@ -149,11 +193,12 @@ int main(int argc, char *argv[])
     // yylex();
 
     // printing all scope tables after lexical analysis is complete
-    // ST->print_all_scope_tables();
+    symbolTable->printAllScopes2(logofs);
 
     // printing line, error and warning counts
-    // logout << "Total lines: " << line_count << endl;
-    // logout << "Total errors: " << error_count << endl;
+    logofs << "Total lines: " << lineCount << endl;
+    logofs << "Total errors: " << errorCount << endl
+           << endl;
     // logout << "Total warnings: " << warning_count << endl;
 
     // closing the files that were opened
