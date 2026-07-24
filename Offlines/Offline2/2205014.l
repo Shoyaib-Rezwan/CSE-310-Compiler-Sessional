@@ -115,8 +115,11 @@ TokenDetails *generateCONST_CHARToken()
 {
     char ch = getActualCharacter();
     string lexeme = "\'" + curr_char_str + "\'";
-    symbolTable->insert(lexeme, "CONST_CHAR");
     TokenDetails *token = new TokenDetails("CONST_CHAR", lexeme);
+    if(!symbolTable->insert(lexeme, "CONST_CHAR"))
+    {
+        token->lexemeExist = true;
+    }
     token->token = "<" + token->tokenName + ", " + ch + ">";
     return token;
 }
@@ -160,6 +163,7 @@ void handleFileWriting(TokenDetails *tokenDetails)
         symbolTable->printAllScopes2(logofs);
         logofs << "\n";
     }
+    delete tokenDetails;
 }
 
 void handleErrorLogging(string errMsg, string lexeme, int spaceCount)
@@ -322,6 +326,7 @@ BEGIN INITIAL;}
 
 {DOUBLE_QUOTE} {
     curr_scanned_str+=yytext;
+    tokenLineCount=0;
     handleFileWriting(generateSTRINGToken());
     BEGIN INITIAL;
 }
@@ -336,17 +341,20 @@ BEGIN INITIAL;}
     curr_scanned_str+="\\\"";
     handleErrorLogging(errMsg9, curr_scanned_str, 1);
     lineCount++;
+    tokenLineCount=0;
     BEGIN INITIAL;
 }
 
 <<EOF>> {
     handleErrorLogging(errMsg9, curr_scanned_str, 1);
+    tokenLineCount=0;
     BEGIN INITIAL;
 }
 
 \n {
     handleErrorLogging(errMsg9, curr_scanned_str, 1);
     lineCount++;
+    tokenLineCount=0;
     BEGIN INITIAL;
 }
 
@@ -354,7 +362,7 @@ BEGIN INITIAL;}
     curr_replaced_str+= getActualCharacter(yytext);
 }
 
-. {curr_scanned_str+=yytext; curr_replaced_str+=yytext; back_slash_encounter=false;}
+. {curr_scanned_str+=yytext; curr_replaced_str+=yytext;}
 }
 
 {DOUBLE_FORWARD_SLASH} {
@@ -382,6 +390,8 @@ BEGIN INITIAL;}
 }
 . {curr_scanned_str+=yytext; back_slash_encounter=false;}
 
+<<EOF>> {handleFileWriting(new TokenDetails("COMMENT", curr_scanned_str));
+BEGIN INITIAL;}
 }
 
 {FORWARD_SLASH_STAR} {
@@ -393,6 +403,7 @@ BEGIN INITIAL;}
 <MULTI_LINE_COMMENT_TOKENIZER>{
 
 {STAR_FORWARD_SLASH} { curr_scanned_str+=yytext; handleFileWriting(new TokenDetails("COMMENT", curr_scanned_str));
+tokenLineCount=0;
 BEGIN INITIAL;
 }
 
@@ -404,6 +415,7 @@ BEGIN INITIAL;
 
 <<EOF>> {
     handleErrorLogging(errMsg8, curr_scanned_str, 1);
+    tokenLineCount=0;
     BEGIN INITIAL;
 }
 

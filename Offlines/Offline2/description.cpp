@@ -107,8 +107,11 @@ TokenDetails *generateCONST_CHARToken()
 {
     char ch = getActualCharacter();
     string lexeme = "\'" + curr_char_str + "\'";
-    symbolTable->insert(lexeme, "CONST_CHAR");
     TokenDetails *token = new TokenDetails("CONST_CHAR", lexeme);
+    if(!symbolTable->insert(lexeme, "CONST_CHAR"))
+    {
+        token->lexemeExist = true;
+    }
     token->token = "<" + token->tokenName + ", " + ch + ">";
     return token;
 }
@@ -152,6 +155,7 @@ void handleFileWriting(TokenDetails *tokenDetails)
         symbolTable->printAllScopes2(logofs);
         logofs << "\n";
     }
+    delete tokenDetails;
 }
 
 void handleErrorLogging(string errMsg, string lexeme, int spaceCount)
