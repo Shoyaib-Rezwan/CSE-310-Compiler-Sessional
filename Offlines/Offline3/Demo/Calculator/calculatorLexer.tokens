@@ -1,0 +1,10 @@
+INT=1
+WHITESPACE=2
+PLUS=3
+TIMES=4
+LPAREN=5
+RPAREN=6
+'+'=3
+'*'=4
+'('=5
+')'=6

@@ -3,181 +3,12 @@
 %x CONST_CHAR_TOKENIZER
 %x STRING_TOKENIZER
 %x SINGLE_LINE_COMMENT_TOKENIZER
-%X MULTI_LINE_COMMENT_TOKENIZER
+%x MULTI_LINE_COMMENT_TOKENIZER
+%x DEFINE_TOKENIZER
+%x INCLUDE_TOKENIZER
 
 %{
-#include "headers/2205014_symbol_table.hpp"
-using namespace std;
-
-unsigned int lineCount = 1, errorCount = 0;
-unsigned int tokenLineCount = 0; // counts lines of multiline string and comment
-ofstream tokenofs("2205014_token.txt");
-ofstream logofs("2205014_log.txt");
-SymbolTable *symbolTable;
-string curr_char_str;
-string curr_scanned_str;
-string curr_replaced_str;
-bool back_slash_encounter;
-
-// error messages
-string errMsg1 = "Too many decimal points";
-string errMsg2 = "Ill formed number";
-string errMsg3 = "Invalid prefix on ID or invalid suffix on Number";
-string errMsg4 = "Multi character constant error";
-string errMsg5 = "Unterminated character";
-string errMsg6 = "Empty character constant error";
-string errMsg7 = "Unrecognized character";
-string errMsg8 = "Unterminated comment";
-string errMsg9 = "Unterminated string";
-struct TokenDetails
-{
-    string tokenName, lexeme, token;
-    bool lexemeExist; // this flag will be true if the lexeme already exists in symboltable
-    TokenDetails(string tokenName = "", string lexeme = "")
-    {
-        this->tokenName = tokenName;
-        this->lexeme = lexeme;
-        token = "<" + tokenName + ", " + lexeme + ">";
-        lexemeExist = false;
-    }
-};
-
-string capitalize(string str)
-{
-    int len = str.size();
-    string capitalStr;
-    capitalStr.resize(len);
-    for (int i = 0; i < len; i++)
-    {
-        capitalStr[i] = toupper(str[i]);
-    }
-    return capitalStr;
-}
-
-TokenDetails *generateKEYWORDToken(string lexeme)
-{
-    string tokenName = capitalize(lexeme);
-    TokenDetails *tokenDetails = new TokenDetails(tokenName, lexeme);
-    tokenDetails->token = "<" + tokenName + ">";
-    return tokenDetails;
-}
-
-TokenDetails *generateLCURLToken()
-{
-    symbolTable->enterScope();
-    return new TokenDetails("LCURL", "{");
-}
-
-TokenDetails *generateRCURLToken()
-{
-    symbolTable->exitScope();
-    return new TokenDetails("RCURL", "}");
-}
-
-TokenDetails *generateIDCONSTToken(string tokenName, string lexeme)
-{
-    TokenDetails *tokenDetails = new TokenDetails(tokenName, lexeme);
-    if (!symbolTable->insert(lexeme, tokenName))
-    {
-        tokenDetails->lexemeExist = true;
-    }
-    return tokenDetails;
-}
-
-char getActualCharacter(string str = curr_char_str)
-{
-    if (str == "\\n")
-        return '\n';
-    if (str == "\\t")
-        return '\t';
-    if (str == "\\\\")
-        return '\\';
-    if (str == "\\'")
-        return '\'';
-    if (str == "\\a")
-        return '\a';
-    if (str == "\\f")
-        return '\f';
-    if (str == "\\r")
-        return '\r';
-    if (str == "\\b")
-        return '\b';
-    if (str == "\\v")
-        return '\v';
-    if (str == "\\0")
-        return '\0';
-    if (str == "\\\"")
-        return '"';
-    return str[0];
-}
-
-TokenDetails *generateCONST_CHARToken()
-{
-    char ch = getActualCharacter();
-    string lexeme = "\'" + curr_char_str + "\'";
-    TokenDetails *token = new TokenDetails("CONST_CHAR", lexeme);
-    if(!symbolTable->insert(lexeme, "CONST_CHAR"))
-    {
-        token->lexemeExist = true;
-    }
-    token->token = "<" + token->tokenName + ", " + ch + ">";
-    return token;
-}
-
-TokenDetails *generateSTRINGToken()
-{
-    TokenDetails *tokenDetails = new TokenDetails("STRING", curr_scanned_str);
-    tokenDetails->token = "<" + tokenDetails->tokenName + ", " + curr_replaced_str + ">";
-    return tokenDetails;
-}
-void handleFileWriting(TokenDetails *tokenDetails)
-{
-    // token writing
-    if (tokenDetails->tokenName != "COMMENT")
-        tokenofs << tokenDetails->token << " ";
-
-    // log writing
-    logofs << "Line no " << lineCount << ": Token <" << tokenDetails->tokenName << "> Lexeme " << tokenDetails->lexeme << " found";
-
-    if (tokenDetails->tokenName == "CONST_CHAR" || tokenDetails->tokenName == "STRING")
-    {
-        logofs << " --> " << tokenDetails->token;
-    }
-    logofs << "\n\n";
-
-    // handle special cases manually
-    if (tokenDetails->lexemeExist)
-    {
-        unsigned int bucket;
-        int position, uniqueNumber;
-        string scopeNo="";
-        symbolTable->lookUp2(tokenDetails->lexeme, bucket, position, uniqueNumber, scopeNo);
-        //< arr : ID > already exists in ScopeTable# 1.1 at position 6, 2
-        logofs << "< " << tokenDetails->lexeme << " : " << tokenDetails->tokenName << " > already exists in ScopeTable# " << scopeNo << " at position " << bucket << ", " << position << "\n\n";
-    }
-
-    // if the token doesn't exist and the lexeme was inserted inside the symbol table
-    //  then print the scope table
-    else if (tokenDetails->tokenName == "ID" || tokenDetails->tokenName == "CONST_INT" || tokenDetails->tokenName == "CONST_FLOAT" || tokenDetails->tokenName == "CONST_CHAR")
-    {
-        symbolTable->printAllScopes2(logofs);
-        logofs << "\n";
-    }
-    delete tokenDetails;
-}
-
-void handleErrorLogging(string errMsg, string lexeme, int spaceCount)
-{
-    errorCount++;
-    int errorLine = (tokenLineCount >= 1) ? lineCount - tokenLineCount + 1 : lineCount;
-    // only use the tokenLineCount whenever you are handling "multiline comment" and String errors
-    tokenLineCount = 0;
-    logofs << "Error at line no " << errorLine << ": " << errMsg << " " << lexeme << "\n";
-    for (int i = 0; i < spaceCount; i++)
-    {
-        logofs << "\n";
-    }
-}
+#include "temp.cpp"
 
 %}
 
@@ -217,9 +48,17 @@ SEMICOLON   ";"
 
 ID          [_a-zA-Z][_a-zA-Z0-9]*
 
-CONST_INT   [0-9]+
+OCTAL 0[0-7]+
 
-CONST_FLOAT [0-9]*\.{CONST_INT}(E[+-]?{CONST_INT})?|{CONST_INT}E[+-]?{CONST_INT}
+HEXADECIMAL 0[Xx]([0-9A-Fa-f]+_?)*[0-9A-Fa-f]
+
+HEXADECIMAL_FLOAT 0[Xx](([0-9A-Fa-f]+_?)*[0-9A-Fa-f])*\.([0-9A-Fa-f]+_?)+([Pp][+-]?{CONST_INT})?
+
+HEXADECIMAL_ESCAPE \\x[0-9A-Fa_f]{2}
+
+CONST_INT   ([0-9]+_?)*[0-9]
+
+CONST_FLOAT {CONST_INT}*\.{CONST_INT}(E[+-]?{CONST_INT})?|{CONST_INT}E[+-]?{CONST_INT}
 
 MULTI_DECIMAL_POINT [0-9]*(\.[0-9]*){2,}(E[+-]?[0-9]+)?
 
@@ -228,6 +67,8 @@ ILL_FORMED_NUMBER (([0-9]+)|([0-9]*\.[0-9]+))E[+-]?[0-9]*\.[0-9]+
 INVALID_ID_SUFFIX ({CONST_INT}|{CONST_FLOAT}){ID}
 
 ESCAPE_CHARACTERS "\\n"|"\\t"|"\\\\"|"\\a"|"\\f"|"\\r"|"\\b"|"\\v"|"\\0"|"\\'"|"\\\""
+
+RAW_STRING R\"\(.*\)\"
 
 SINGLE_QUOTE "\'"
 
@@ -245,6 +86,13 @@ MULTI_CHAR_CONSTANT '([^\n\\]|{ESCAPE_CHARACTERS}){2,}'
 
 EMPTY_CHAR  ''
 
+BITOP "&"|"^"|"~"|"<<"|">>"|"|"
+
+COMPOUND_ASSIGN "+="|"-="|"*="|"/="|"%="|"&="|"<<="|">>="
+
+DEFINE "#define"
+
+INCLUDE "#include"
 %%
 {WHITESPACE} {} 
 
@@ -264,13 +112,30 @@ EMPTY_CHAR  ''
 
 {NOT} {handleFileWriting(new TokenDetails("NOT", yytext));}
 
-{LPAREN} {handleFileWriting(new TokenDetails("LPAREN", yytext));}
+{LPAREN} {countParen++; handleFileWriting(new TokenDetails("LPAREN", yytext));}
 
-{RPAREN} {handleFileWriting(new TokenDetails("RPAREN", yytext));}
+{RPAREN} {
+    cout<<countParen;
+    countParen--;
+    if(countParen<0)
+    {handleErrorLogging("Unmatched closing parenthesis or Unmatched closing brace", yytext, 1);
+    countParen=0;
+    }
+    else
+    handleFileWriting(new TokenDetails("RPAREN", yytext));
+}
 
-{LCURL} {handleFileWriting(generateLCURLToken());}
+{LCURL} {countCurly++; handleFileWriting(generateLCURLToken());}
 
-{RCURL} {handleFileWriting(generateRCURLToken());}
+{RCURL} {
+    countCurly--;
+    if(countCurly<0)
+    {handleErrorLogging("Unmatched closing parenthesis or Unmatched closing brace", yytext, 1);
+    countCurly=0;
+    }
+    else
+    handleFileWriting(generateRCURLToken());
+    }
 
 {LTHIRD} {handleFileWriting(new TokenDetails("LTHIRD", yytext));}
 
@@ -280,12 +145,53 @@ EMPTY_CHAR  ''
 
 {SEMICOLON} {handleFileWriting(new TokenDetails("SEMICOLON", yytext));}
 
-{CONST_INT} {handleFileWriting(generateIDCONSTToken("CONST_INT",yytext));}
+{HEXADECIMAL} {handleFileWriting(generateHEXADECIMALToken(yytext));}
 
-{CONST_FLOAT} {handleFileWriting(generateIDCONSTToken("CONST_FLOAT",yytext));}
+{CONST_INT}|{OCTAL} {handleFileWriting(generateIDCONSTToken("CONST_INT",yytext));}
 
-{ID}  {handleFileWriting(generateIDCONSTToken("ID",yytext));}
+{CONST_FLOAT}|{HEXADECIMAL_FLOAT} {handleFileWriting(generateIDCONSTToken("CONST_FLOAT",yytext));}
 
+{ID}  {
+    if(strlen(yytext)>31)
+    {
+        handleErrorLogging("Identifier length exceed!", yytext, 1);
+    }
+    else
+    handleFileWriting(generateIDCONSTToken("ID",yytext));
+}
+
+{RAW_STRING} {
+    string str=yytext;
+    handleFileWriting(new TokenDetails("STRING", str.substr(3, str.size()-5)));
+    }
+
+{DEFINE} {
+    curr_scanned_str="";
+    BEGIN DEFINE_TOKENIZER;
+}
+
+<DEFINE_TOKENIZER>{
+\n { handleFileWriting(new TokenDetails("DEFINE", curr_scanned_str));
+lineCount++;
+BEGIN INITIAL;
+}
+<<EOF>> {handleFileWriting(new TokenDetails("DEFINE", curr_scanned_str));
+BEGIN INITIAL;}
+. {curr_scanned_str+=yytext;}
+
+}
+{INCLUDE} {
+    BEGIN INCLUDE_TOKENIZER;
+}
+<INCLUDE_TOKENIZER>
+{
+WHITESPACE {}
+"<"[^>\n]+">" {
+    handleFileWriting(generateINCLUDEToken(yytext));
+    BEGIN INITIAL;    
+}
+
+}
 {SINGLE_QUOTE} {
 curr_char_str="";
 BEGIN CONST_CHAR_TOKENIZER;
@@ -294,8 +200,16 @@ BEGIN CONST_CHAR_TOKENIZER;
 <CONST_CHAR_TOKENIZER>{
    
 {SINGLE_QUOTE} {
+if(validEscape==true)
 handleFileWriting(generateCONST_CHARToken());
+else
+handleErrorLogging("Invalid escape character", "\'"+curr_char_str+"\'",2);
+validEscape=true;
 BEGIN INITIAL;}
+
+{HEXADECIMAL_ESCAPE} {
+    curr_char_str+=yytext;
+}
 
 {ESCAPE_CHARACTERS} {
     curr_char_str+=yytext;
@@ -305,6 +219,11 @@ BEGIN INITIAL;}
     handleErrorLogging(errMsg5, "\'"+curr_char_str, 2);
     lineCount++;
     BEGIN INITIAL;
+}
+
+\\. {
+    curr_char_str+=yytext;
+    validEscape=false;
 }
 
 <<EOF>> {
@@ -358,9 +277,15 @@ BEGIN INITIAL;}
     BEGIN INITIAL;
 }
 
-{ESCAPE_CHARACTERS} {curr_scanned_str+=yytext;
+{HEXADECIMAL_ESCAPE} {
+    curr_scanned_str+=yytext;
+    curr_replaced_str+=getActualCharacter(yytext);
+}
+
+{ESCAPE_CHARACTERS}  {curr_scanned_str+=yytext;
     curr_replaced_str+= getActualCharacter(yytext);
 }
+
 
 . {curr_scanned_str+=yytext; curr_replaced_str+=yytext;}
 }
@@ -397,15 +322,22 @@ BEGIN INITIAL;}
 {FORWARD_SLASH_STAR} {
     tokenLineCount=1;
     curr_scanned_str="/*";
+    commentNest=0;
     BEGIN MULTI_LINE_COMMENT_TOKENIZER;
 }
 
 <MULTI_LINE_COMMENT_TOKENIZER>{
 
-{STAR_FORWARD_SLASH} { curr_scanned_str+=yytext; handleFileWriting(new TokenDetails("COMMENT", curr_scanned_str));
+{STAR_FORWARD_SLASH} { curr_scanned_str+=yytext; if(commentNest==0){ 
+handleFileWriting(new TokenDetails("COMMENT", curr_scanned_str));
 tokenLineCount=0;
-BEGIN INITIAL;
+BEGIN INITIAL;}
+else{
+    commentNest--;
 }
+}
+
+{FORWARD_SLASH_STAR} {curr_scanned_str+=yytext; commentNest++;}
 
 \n {
     tokenLineCount++;
@@ -433,6 +365,9 @@ BEGIN INITIAL;
 
 {EMPTY_CHAR} {handleErrorLogging(errMsg6, yytext, 2);}
 
+{BITOP} {handleFileWriting(new TokenDetails("BITOP", yytext));}
+
+{COMPOUND_ASSIGN} {handleFileWriting(new TokenDetails("COMPOUND_ASSIGN", yytext));}
 
 [\n] {lineCount++;}
 
