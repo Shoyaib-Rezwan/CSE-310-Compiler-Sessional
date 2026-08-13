@@ -47,6 +47,8 @@ public:
 
     virtual std::any visitUniParamDec(CSubsetParser::UniParamDecContext *context) = 0;
 
+    virtual std::any visitUniParamAddOp(CSubsetParser::UniParamAddOpContext *context) = 0;
+
     virtual std::any visitCmpd_stmtStmts(CSubsetParser::Cmpd_stmtStmtsContext *context) = 0;
 
     virtual std::any visitCmpd_stmtParen(CSubsetParser::Cmpd_stmtParenContext *context) = 0;
@@ -67,6 +69,8 @@ public:
 
     virtual std::any visitDec_lstCommaID(CSubsetParser::Dec_lstCommaIDContext *context) = 0;
 
+    virtual std::any visitDec_lstIDAddOpID(CSubsetParser::Dec_lstIDAddOpIDContext *context) = 0;
+
     virtual std::any visitStmtsStmt(CSubsetParser::StmtsStmtContext *context) = 0;
 
     virtual std::any visitStmtsStmtsStmt(CSubsetParser::StmtsStmtsStmtContext *context) = 0;
@@ -75,7 +79,7 @@ public:
 
     virtual std::any visitStmtExpr_stmt(CSubsetParser::StmtExpr_stmtContext *context) = 0;
 
-    virtual std::any visitStmtIf(CSubsetParser::StmtIfContext *context) = 0;
+    virtual std::any visitStmtIfElse(CSubsetParser::StmtIfElseContext *context) = 0;
 
     virtual std::any visitStmtWhile(CSubsetParser::StmtWhileContext *context) = 0;
 
@@ -83,9 +87,17 @@ public:
 
     virtual std::any visitStmtReturn(CSubsetParser::StmtReturnContext *context) = 0;
 
+    virtual std::any visitStmtCmpd_stmt(CSubsetParser::StmtCmpd_stmtContext *context) = 0;
+
+    virtual std::any visitStmtFor(CSubsetParser::StmtForContext *context) = 0;
+
+    virtual std::any visitStmtIf(CSubsetParser::StmtIfContext *context) = 0;
+
     virtual std::any visitExpr_stmtSemicolon(CSubsetParser::Expr_stmtSemicolonContext *context) = 0;
 
     virtual std::any visitExpr_stmtExprSemicolon(CSubsetParser::Expr_stmtExprSemicolonContext *context) = 0;
+
+    virtual std::any visitExpr_stmtExpr(CSubsetParser::Expr_stmtExprContext *context) = 0;
 
     virtual std::any visitVarId(CSubsetParser::VarIdContext *context) = 0;
 
@@ -106,6 +118,8 @@ public:
     virtual std::any visitSimpleTerm(CSubsetParser::SimpleTermContext *context) = 0;
 
     virtual std::any visitSimpleSimpleTerm(CSubsetParser::SimpleSimpleTermContext *context) = 0;
+
+    virtual std::any visitSimpleSimpleAdd(CSubsetParser::SimpleSimpleAddContext *context) = 0;
 
     virtual std::any visitTermUnary(CSubsetParser::TermUnaryContext *context) = 0;
 

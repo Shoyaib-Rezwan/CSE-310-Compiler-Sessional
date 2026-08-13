@@ -29,6 +29,7 @@ parameter_list
     | parameter_list COMMA type_specifier       # MultiParamDec
     | type_specifier ID                         # UniParamDef
     | type_specifier                            # UniParamDec
+    | type_specifier ADDOP                      # UniParamAddOp         // for error handle line foo(int -)
     ;
 
 compound_statement
@@ -50,6 +51,7 @@ declaration_list
     | declaration_list COMMA ID LTHIRD CONST_INT RTHIRD # Dec_lstCommaThird
     | ID                                                # Dec_lstID   
     | ID LTHIRD CONST_INT RTHIRD                        # Dec_lstThird
+    | ID ADDOP ID                                       # Dec_lstIDAddOpID // error int x-y
     ;
 
 statements
@@ -58,17 +60,21 @@ statements
     ;
 
 statement
-    : var_declaration                                        # StmtVar_dec
-    | expression_statement                                   # StmtExpr_stmt
-    | IF LPAREN expression RPAREN statement ELSE statement   # StmtIf
-    | WHILE LPAREN expression RPAREN statement               # StmtWhile
-    | PRINTLN LPAREN ID RPAREN SEMICOLON                     # StmtPrint
-    | RETURN expression SEMICOLON                            # StmtReturn
+    : var_declaration                                                                   # StmtVar_dec
+    | expression_statement                                                              # StmtExpr_stmt
+    | IF LPAREN expression RPAREN statement ELSE statement                              # StmtIfElse
+    | WHILE LPAREN expression RPAREN statement                                          # StmtWhile
+    | PRINTLN LPAREN ID RPAREN SEMICOLON                                                # StmtPrint
+    | RETURN expression SEMICOLON                                                       # StmtReturn
+    | compound_statement                                                                # StmtCmpd_stmt    // added rule for blocks
+    | FOR LPAREN expression_statement expression_statement expression RPAREN statement  # StmtFor // added rule for for
+    | IF LPAREN expression RPAREN statement                                             # StmtIf // added rule for single if
     ;
 
 expression_statement
     : SEMICOLON             # Expr_stmtSemicolon                                                        
     | expression SEMICOLON  # Expr_stmtExprSemicolon
+    | expression            # Expr_stmtExpr             // error handling a=2
     ;
 
 variable
@@ -92,8 +98,9 @@ rel_expression
     ;
 
 simple_expression
-    : term                          # SimpleTerm
-    | simple_expression ADDOP term  # SimpleSimpleTerm
+    : term                              # SimpleTerm
+    | simple_expression ADDOP term      # SimpleSimpleTerm
+    | simple_expression ADDOP ASSIGNOP  # SimpleSimpleAdd    // error: a= 2 + =
     ;
 
 term

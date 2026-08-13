@@ -299,6 +299,16 @@ public:
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
+  class  UniParamAddOpContext : public Parameter_listContext {
+  public:
+    UniParamAddOpContext(Parameter_listContext *ctx);
+
+    Type_specifierContext *type_specifier();
+    antlr4::tree::TerminalNode *ADDOP();
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
   Parameter_listContext* parameter_list();
   Parameter_listContext* parameter_list(int precedence);
   class  Compound_statementContext : public antlr4::ParserRuleContext {
@@ -453,6 +463,17 @@ public:
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
+  class  Dec_lstIDAddOpIDContext : public Declaration_listContext {
+  public:
+    Dec_lstIDAddOpIDContext(Declaration_listContext *ctx);
+
+    std::vector<antlr4::tree::TerminalNode *> ID();
+    antlr4::tree::TerminalNode* ID(size_t i);
+    antlr4::tree::TerminalNode *ADDOP();
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
   Declaration_listContext* declaration_list();
   Declaration_listContext* declaration_list(int precedence);
   class  StatementsContext : public antlr4::ParserRuleContext {
@@ -526,6 +547,15 @@ public:
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
+  class  StmtCmpd_stmtContext : public StatementContext {
+  public:
+    StmtCmpd_stmtContext(StatementContext *ctx);
+
+    Compound_statementContext *compound_statement();
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
   class  StmtExpr_stmtContext : public StatementContext {
   public:
     StmtExpr_stmtContext(StatementContext *ctx);
@@ -544,6 +574,21 @@ public:
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
+  class  StmtIfElseContext : public StatementContext {
+  public:
+    StmtIfElseContext(StatementContext *ctx);
+
+    antlr4::tree::TerminalNode *IF();
+    antlr4::tree::TerminalNode *LPAREN();
+    ExpressionContext *expression();
+    antlr4::tree::TerminalNode *RPAREN();
+    std::vector<StatementContext *> statement();
+    StatementContext* statement(size_t i);
+    antlr4::tree::TerminalNode *ELSE();
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
   class  StmtPrintContext : public StatementContext {
   public:
     StmtPrintContext(StatementContext *ctx);
@@ -557,6 +602,21 @@ public:
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
+  class  StmtForContext : public StatementContext {
+  public:
+    StmtForContext(StatementContext *ctx);
+
+    antlr4::tree::TerminalNode *FOR();
+    antlr4::tree::TerminalNode *LPAREN();
+    std::vector<Expression_statementContext *> expression_statement();
+    Expression_statementContext* expression_statement(size_t i);
+    ExpressionContext *expression();
+    antlr4::tree::TerminalNode *RPAREN();
+    StatementContext *statement();
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
   class  StmtIfContext : public StatementContext {
   public:
     StmtIfContext(StatementContext *ctx);
@@ -565,9 +625,7 @@ public:
     antlr4::tree::TerminalNode *LPAREN();
     ExpressionContext *expression();
     antlr4::tree::TerminalNode *RPAREN();
-    std::vector<StatementContext *> statement();
-    StatementContext* statement(size_t i);
-    antlr4::tree::TerminalNode *ELSE();
+    StatementContext *statement();
 
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
@@ -602,6 +660,15 @@ public:
 
     ExpressionContext *expression();
     antlr4::tree::TerminalNode *SEMICOLON();
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  Expr_stmtExprContext : public Expression_statementContext {
+  public:
+    Expr_stmtExprContext(Expression_statementContext *ctx);
+
+    ExpressionContext *expression();
 
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
@@ -778,6 +845,17 @@ public:
     Simple_expressionContext *simple_expression();
     antlr4::tree::TerminalNode *ADDOP();
     TermContext *term();
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  SimpleSimpleAddContext : public Simple_expressionContext {
+  public:
+    SimpleSimpleAddContext(Simple_expressionContext *ctx);
+
+    Simple_expressionContext *simple_expression();
+    antlr4::tree::TerminalNode *ADDOP();
+    antlr4::tree::TerminalNode *ASSIGNOP();
 
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };

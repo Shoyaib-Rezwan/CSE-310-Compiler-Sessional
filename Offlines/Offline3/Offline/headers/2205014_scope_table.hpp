@@ -16,19 +16,19 @@ public:
     // }
 
     // modified hash function for offline 2
-//     static unsigned int SDBMHash(string str, unsigned int num_buckets)
-//     {
-//         unsigned int hash = 0;
-//         unsigned int len = str.length();
-//         for (unsigned int i = 0; i < len; i++)
-//         {
-//             unsigned char c = static_cast<unsigned char>(str[i]);
-//             hash = c + (hash << 6) + (hash << 16) - hash;
-//         }
-//         return hash % num_buckets;
-//     }
+    //     static unsigned int SDBMHash(string str, unsigned int num_buckets)
+    //     {
+    //         unsigned int hash = 0;
+    //         unsigned int len = str.length();
+    //         for (unsigned int i = 0; i < len; i++)
+    //         {
+    //             unsigned char c = static_cast<unsigned char>(str[i]);
+    //             hash = c + (hash << 6) + (hash << 16) - hash;
+    //         }
+    //         return hash % num_buckets;
+    //     }
 
-// USED HASH FOR OFFLINE 3
+    // USED HASH FOR OFFLINE 3
     static unsigned int SDBMHash(string str, unsigned int num_buckets)
     {
         unsigned int sum = 0;
@@ -90,14 +90,14 @@ public:
         delete[] buckets;
     }
 
-    bool insert(const string key, const string type, const string dtype="")
+    bool insert(const string key, const string type, const string dtype = "", bool isArray = false, bool isDefined = true)
     {
         unsigned int temp1;
         int temp2;
         if (lookUp(key, temp1, temp2, temp2) == nullptr)
         {
             unsigned int bucket = HashFunction::SDBMHash(key, bucketSize);
-            SymbolInfo *symbolInfo = new SymbolInfo(key, type, dtype);
+            SymbolInfo *symbolInfo = new SymbolInfo(key, type, dtype, isArray, isDefined);
             SymbolInfo *current = buckets[bucket];
             int collision = 0;
             if (current == nullptr)
@@ -113,7 +113,7 @@ public:
                 collision++;
             }
             // modified for offline 2
-            // cout << "\tInserted in ScopeTable# " << uniqueNumber << " at position " << bucket + 1 << ", " << collision + 1 << '\n'; 
+            // cout << "\tInserted in ScopeTable# " << uniqueNumber << " at position " << bucket + 1 << ", " << collision + 1 << '\n';
             return true;
         }
         return false;
@@ -216,11 +216,11 @@ public:
             {
                 continue;
             }
-            ofs << i << " --> ";
+            ofs << " " << i << " --> ";
             SymbolInfo *current = buckets[i];
             while (current != nullptr)
             {
-                ofs << "< " << current->getName() << " , " << current->getType() << " >";
+                ofs << "< " << current->getName() << " , " << current->getType() << " > ";
                 current = current->getNext();
             }
             ofs << "\n";

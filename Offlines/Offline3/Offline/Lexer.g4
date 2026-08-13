@@ -99,7 +99,6 @@ RTHIRD   : ']' { writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": T
 SEMICOLON: ';' { writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <SEMICOLON> Lexeme " + getText()); };
 COMMA    : ',' { writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <COMMA> Lexeme " + getText()); };
 
-
 ADDOP    : [+\-] { writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <ADDOP> Lexeme " + getText()); };
 MULOP    : [*/%] { writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <MULOP> Lexeme " + getText()); };
 INCOP    : '++' { writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <INCOP> Lexeme " + getText()); };

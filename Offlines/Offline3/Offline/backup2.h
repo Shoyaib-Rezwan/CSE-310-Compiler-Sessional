@@ -83,14 +83,14 @@
 //     any visitStart(CSubsetParser::StartContext *ctx) override
 //     {
 //         any returnVal = visit(ctx->program());
-//         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": start : program\n\n";
+//         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": start : program\n";
 //         writeIntoLogFile(message);
 //         table->printAllScopes2(logFile);
 //         table->exitScope();
-//         logFile << "\n\n\n"
+//         logFile << "\n\n"
 //                 << "Total lines: " << ctx->getStop()->getLine();
 //         logFile << "\n"
-//                 << "Total errors: " << errorCnt;
+//                 << "Total errors: " << errorCnt << "\n\n";
 //         return returnVal;
 //     }
 
@@ -100,7 +100,7 @@
 //         string unit = any_cast<string>(visit(ctx->unit()));
 //         string matchStr = program + "\n" + unit;
 //         string message = "Line " + to_string(ctx->unit()->getStart()->getLine()) + ": program : program unit\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n\n\n";
 //         writeIntoLogFile(message);
 //         return matchStr;
 //     }
@@ -109,7 +109,7 @@
 //     {
 //         string matchStr = any_cast<string>(visit(ctx->unit()));
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": program : unit\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n\n\n";
 //         writeIntoLogFile(message);
 //         return matchStr;
 //     }
@@ -118,7 +118,7 @@
 //     {
 //         string matchStr = any_cast<string>(visit(ctx->var_declaration()));
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": unit : var_declaration\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n\n\n";
 //         writeIntoLogFile(message);
 //         return matchStr;
 //     }
@@ -127,7 +127,7 @@
 //     {
 //         string matchStr = any_cast<string>(visit(ctx->func_declaration()));
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": unit : func_declaration\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n\n\n";
 //         writeIntoLogFile(message);
 //         return matchStr;
 //     }
@@ -136,7 +136,7 @@
 //     {
 //         string matchStr = any_cast<string>(visit(ctx->func_definition()));
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": unit : func_definition\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n\n\n";
 //         writeIntoLogFile(message);
 //         return matchStr;
 //     }
@@ -171,7 +171,7 @@
 //         string SEMICOLON = ctx->SEMICOLON()->getText();
 //         string matchStr = type_specifier + " " + ID + LPAREN + parameter_list + RPAREN + SEMICOLON;
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n\n\n";
 //         writeIntoLogFile(message);
 //         // exit the scope but don't print it
 //         table->exitScope();
@@ -196,7 +196,7 @@
 //         string SEMICOLON = ctx->SEMICOLON()->getText();
 //         string matchStr = type_specifier + " " + ID + LPAREN + RPAREN + SEMICOLON;
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n\n\n";
 //         writeIntoLogFile(message);
 //         // exit the scope but don't print it
 //         table->exitScope();
@@ -264,6 +264,17 @@
 //         s->setParamTypes(paramTypes);
 
 //         string RPAREN = ctx->RPAREN()->getText();
+//         // handle errors where param types are not given
+//         for (int i = 0; i < paramTypes.size(); i++)
+//         {
+//             if (paramTypes[i] == "#")
+//             {
+//                 errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": " + to_string(i + 1) + "th parameter's name not given in function definition of var\n\n";
+//                 errorFile << errMsg;
+//                 logFile << errMsg;
+//                 errorCnt++;
+//             }
+//         }
 //         string compound_statement = any_cast<string>(visit(ctx->compound_statement()));
 //         string matchStr = type_specifier + " " + ID + LPAREN + parameter_list + RPAREN + compound_statement;
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement\n\n";
@@ -315,7 +326,7 @@
 //         SymbolInfo *s = lookup(ID);
 //         // check param Number mismatch error
 //         vector<string> params = s->getParamTypes();
-//         if (checkParamNumbers && params.size() != paramTypes.size())
+//         if (checkParamNumbers && params.size() != 0) // cause this definition doesn't have parameters
 //         {
 //             errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": Total number of arguments mismatch with declaration in function " + ID + "\n\n";
 //             errorFile << errMsg;
@@ -341,7 +352,7 @@
 //         string ID = ctx->ID()->getText();
 //         if (!table->insert(ID, "ID", exprTypes.get(ctx->type_specifier())))
 //         {
-//             string errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": Multiple declaration of " + ID + "  in parameter\n\n ";
+//             string errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": Multiple declaration of " + ID + " in parameter\n\n ";
 //             errorFile << errMsg;
 //             logFile << errMsg;
 //             errorCnt++;
@@ -379,7 +390,7 @@
 //         string ID = ctx->ID()->getText();
 //         if (!table->insert(ID, "ID", exprTypes.get(ctx->type_specifier())))
 //         {
-//             string errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": Multiple declaration of " + ID + "  in parameter\n\n";
+//             string errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": Multiple declaration of " + ID + " in parameter\n\n";
 //             errorFile << errMsg;
 //             logFile << errMsg;
 //             errorCnt++;
@@ -409,11 +420,12 @@
 //         string LCURL = ctx->LCURL()->getText();
 //         string statements = any_cast<string>(visit(ctx->statements()));
 //         string RCURL = ctx->RCURL()->getText();
-//         string matchStr = LCURL + "\n" + statements + "\n" + RCURL;
+//         string matchStr = LCURL + "\n" + statements + "\n" + RCURL + "\n";
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": compound_statement : LCURL statements RCURL\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n";
 //         writeIntoLogFile(message);
 //         table->printAllScopes2(logFile);
+//         logFile << "\n\n";
 //         table->exitScope();
 //         return matchStr;
 //     }
@@ -422,11 +434,12 @@
 //     {
 //         string LCURL = ctx->LCURL()->getText();
 //         string RCURL = ctx->RCURL()->getText();
-//         string matchStr = LCURL + "\n" + RCURL;
+//         string matchStr = LCURL + RCURL + "\n";
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": compound_statement : LCURL RCURL\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n";
 //         writeIntoLogFile(message);
 //         table->printAllScopes2(logFile);
+//         logFile << "\n\n";
 //         table->exitScope();
 //         return matchStr;
 //     }
@@ -572,7 +585,7 @@
 //     {
 //         string matchStr = any_cast<string>(visit(ctx->statement()));
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": statements : statement\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n\n\n";
 //         writeIntoLogFile(message);
 
 //         return matchStr;
@@ -584,7 +597,7 @@
 //         string statement = any_cast<string>(visit(ctx->statement()));
 //         string matchStr = statements + "\n" + statement;
 //         string message = "Line " + to_string(ctx->statement()->getStart()->getLine()) + ": statements : statements statement\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n\n\n";
 //         writeIntoLogFile(message);
 
 //         return matchStr;
@@ -594,7 +607,7 @@
 //     {
 //         string matchStr = any_cast<string>(visit(ctx->var_declaration()));
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": statement : var_declaration\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n\n\n";
 //         writeIntoLogFile(message);
 //         return matchStr;
 //     }
@@ -603,7 +616,7 @@
 //     {
 //         string matchStr = any_cast<string>(visit(ctx->expression_statement()));
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": statement : expression_statement\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n\n\n";
 //         writeIntoLogFile(message);
 
 //         return matchStr;
@@ -659,7 +672,7 @@
 //         }
 
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": statement : PRINTLN LPAREN ID RPAREN SEMICOLON\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n\n\n";
 //         writeIntoLogFile(message);
 //         return matchStr;
 //     }
@@ -671,7 +684,7 @@
 //         string SEMICOLON = ctx->SEMICOLON()->getText();
 //         string matchStr = RETURN + " " + expression + SEMICOLON;
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": statement : RETURN expression SEMICOLON\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n\n\n";
 //         writeIntoLogFile(message);
 
 //         return matchStr;
@@ -709,7 +722,7 @@
 //         SymbolInfo *s = table->lookUp2(matchStr, bucket, position, uniqueNumber, scopeNo);
 //         if (s != nullptr && s->getIsArray())
 //         {
-//             string errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": Type mismatch, " + matchStr + " is an array \n\n";
+//             string errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": Type mismatch, " + matchStr + " is an array\n\n";
 //             errorFile << errMsg;
 //             logFile << errMsg;
 //             errorCnt++;
@@ -925,7 +938,7 @@
 //         // non integer operand
 //         if (MULOP == "%" && (operand1Type != "INT" || operand2Type != "INT"))
 //         {
-//             string errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": Non-Integer operand on modulus operator \n\n";
+//             string errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": Non-Integer operand on modulus operator\n\n";
 //             errorFile << errMsg;
 //             logFile << errMsg;
 //             errorCnt++;
@@ -1157,7 +1170,6 @@
 //         writeIntoLogFile(message);
 //         return matchStr;
 //     }
-//     // added rules
 
 //     any visitStmtIf(CSubsetParser::StmtIfContext *ctx) override
 //     {
@@ -1206,5 +1218,76 @@
 //         writeIntoLogFile(message);
 
 //         return matchStr;
+//     }
+
+//     // added rules for syntax analysis
+//     any visitUniParamAddOp(CSubsetParser::UniParamAddOpContext *ctx) override
+//     {
+//         string type_specifier = any_cast<string>(visit(ctx->type_specifier()));
+//         string ADDOP = ctx->ADDOP()->getText();
+
+//         string matchStr = type_specifier;
+//         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": parameter_list : type_specifier\n\n" + matchStr + "\n\n";
+//         writeIntoLogFile(message);
+
+//         string errMsg1 = "Error at line " + to_string(ctx->getStart()->getLine()) + ": syntax error, unexpected token(s) '" + ADDOP + "' before ')'\n\n";
+
+//         errorFile << errMsg1;
+//         logFile << errMsg1;
+//         errorCnt++;
+
+//         // In the parameter list, just push # as type specifier
+//         paramTypes.push_back("#");
+
+//         return matchStr;
+//     }
+
+//     any visitSimpleSimpleAdd(CSubsetParser::SimpleSimpleAddContext *ctx) override
+//     {
+//         string simple_expression = any_cast<string>(visit(ctx->simple_expression()));
+//         string ADDOP = ctx->ADDOP()->getText();
+//         string ASSIGNOP = ctx->ASSIGNOP()->getText();
+//         string errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": syntax error, invalid operand '" + ASSIGNOP + "' after '" + ADDOP + "'\n\n";
+//         errorFile << errMsg;
+//         logFile << errMsg;
+//         errorCnt++;
+
+//         return simple_expression;
+//     }
+
+//     any visitExpr_stmtExpr(CSubsetParser::Expr_stmtExprContext *ctx) override
+//     {
+//         string expression = any_cast<string>(visit(ctx->expression()));
+
+//         string errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": syntax error, missing ';' after expression '" + expression + "'\n\n";
+//         errorFile << errMsg;
+//         logFile << errMsg;
+//         errorCnt++;
+
+//         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": expression_statement : expression (missing SEMICOLON)\n\n";
+//         message = message + expression + "\n\n";
+//         writeIntoLogFile(message);
+
+//         return expression;
+//     }
+//     any visitDec_lstIDAddOpID(CSubsetParser::Dec_lstIDAddOpIDContext *ctx) override
+//     {
+//         string ID1 = ctx->ID(0)->getText();
+
+//         // push only the first valid ID
+//         table->insert(ID1, "ID", decLstType);
+
+//         logFile << "Line " << to_string(ctx->getStart()->getLine()) << ": declaration_list : ID\n\n"
+//                 << ID1 << "\n\n";
+
+//         string unexpectedTokens = ctx->ADDOP()->getText() + " " + ctx->ID(1)->getText();
+
+//         string errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": syntax error, unexpected token(s) '" + unexpectedTokens + "' in declaration list\n\n";
+
+//         errorCnt++;
+//         errorFile << errMsg;
+//         logFile << errMsg;
+
+//         return ID1;
 //     }
 // };

@@ -63,11 +63,11 @@ public:
         return uniqueNumber;
     }
 
-    bool insert(const string key, const string type, const string dtype = "")
+    bool insert(const string key, const string type, const string dtype = "", bool isArray = false, bool isDefined = true)
     {
         if (current == nullptr)
             return false;
-        return current->insert(key, type, dtype);
+        return current->insert(key, type, dtype, isArray, isDefined);
     }
 
     bool remove(const string key, unsigned int &bucket, int &position, int &uniqueNumber)
@@ -131,6 +131,7 @@ public:
         int tab = 1;
         while (temp != nullptr)
         {
+            ofs << "\n\n\n";
             temp->print2(tab++, ofs);
             temp = temp->getParent();
         }
