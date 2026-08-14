@@ -7,7 +7,7 @@
     extern std::ofstream lexLogFile;
 
 
-// Generated from CSubset.g4 by ANTLR 4.13.2
+// Generated from CSubset_2205014.g4 by ANTLR 4.13.2
 
 #pragma once
 
@@ -17,7 +17,7 @@
 
 
 
-class  CSubsetLexer : public antlr4::Lexer {
+class  CSubset_2205014Lexer : public antlr4::Lexer {
 public:
   enum {
     LINE_COMMENT = 1, BLOCK_COMMENT = 2, STRING = 3, WS = 4, IF = 5, ELSE = 6, 
@@ -28,9 +28,9 @@ public:
     CONST_INT = 31, CONST_FLOAT = 32
   };
 
-  explicit CSubsetLexer(antlr4::CharStream *input);
+  explicit CSubset_2205014Lexer(antlr4::CharStream *input);
 
-  ~CSubsetLexer() override;
+  ~CSubset_2205014Lexer() override;
 
 
       void writeIntoLexLogFile(const std::string &message) {

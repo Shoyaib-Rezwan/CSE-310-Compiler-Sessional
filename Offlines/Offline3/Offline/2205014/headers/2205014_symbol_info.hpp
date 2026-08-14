@@ -8,7 +8,6 @@ class SymbolInfo
     bool isArray;
     bool isDefined;
     SymbolInfo *next;
-    bool isFunction;
 
     // information about functions
     vector<string> paramTypes; // parameter types
@@ -16,7 +15,6 @@ public:
     SymbolInfo(string name = "", string type = "", string dtype = "", bool isArray = false, bool isDefined = true, SymbolInfo *next = nullptr) : name(name), type(type), next(next), dtype(dtype), isArray(isArray), isDefined(isDefined)
     {
         paramTypes.resize(0);
-        isFunction = false;
     }
 
     void setName(const string name)
@@ -73,13 +71,5 @@ public:
     vector<string> getParamTypes()
     {
         return paramTypes;
-    }
-    void setIsFunction()
-    {
-        isFunction = true;
-    }
-    bool getIsFunction()
-    {
-        return isFunction;
     }
 };

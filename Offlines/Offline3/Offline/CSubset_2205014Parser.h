@@ -1,5 +1,5 @@
 
-// Generated from CSubset.g4 by ANTLR 4.13.2
+// Generated from CSubset_2205014.g4 by ANTLR 4.13.2
 
 #pragma once
 
@@ -9,7 +9,7 @@
 
 
 
-class  CSubsetParser : public antlr4::Parser {
+class  CSubset_2205014Parser : public antlr4::Parser {
 public:
   enum {
     LINE_COMMENT = 1, BLOCK_COMMENT = 2, STRING = 3, WS = 4, IF = 5, ELSE = 6, 
@@ -30,11 +30,11 @@ public:
     RuleFactor = 20, RuleArgument_list = 21, RuleArguments = 22
   };
 
-  explicit CSubsetParser(antlr4::TokenStream *input);
+  explicit CSubset_2205014Parser(antlr4::TokenStream *input);
 
-  CSubsetParser(antlr4::TokenStream *input, const antlr4::atn::ParserATNSimulatorOptions &options);
+  CSubset_2205014Parser(antlr4::TokenStream *input, const antlr4::atn::ParserATNSimulatorOptions &options);
 
-  ~CSubsetParser() override;
+  ~CSubset_2205014Parser() override;
 
   std::string getGrammarFileName() const override;
 
@@ -278,6 +278,22 @@ public:
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
+  class  MultiParamADDOPContext : public Parameter_listContext {
+  public:
+    MultiParamADDOPContext(Parameter_listContext *ctx);
+
+    antlr4::Token *op = nullptr;
+    Parameter_listContext *parameter_list();
+    antlr4::tree::TerminalNode *COMMA();
+    Type_specifierContext *type_specifier();
+    antlr4::tree::TerminalNode *ADDOP();
+    antlr4::tree::TerminalNode *MULOP();
+    antlr4::tree::TerminalNode *RELOP();
+    antlr4::tree::TerminalNode *LOGICOP();
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
   class  MultiParamDefContext : public Parameter_listContext {
   public:
     MultiParamDefContext(Parameter_listContext *ctx);
@@ -303,8 +319,12 @@ public:
   public:
     UniParamAddOpContext(Parameter_listContext *ctx);
 
+    antlr4::Token *op = nullptr;
     Type_specifierContext *type_specifier();
     antlr4::tree::TerminalNode *ADDOP();
+    antlr4::tree::TerminalNode *MULOP();
+    antlr4::tree::TerminalNode *RELOP();
+    antlr4::tree::TerminalNode *LOGICOP();
 
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
@@ -429,6 +449,23 @@ public:
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
+  class  Dec_lstCOMMAIDAddopIDContext : public Declaration_listContext {
+  public:
+    Dec_lstCOMMAIDAddopIDContext(Declaration_listContext *ctx);
+
+    antlr4::Token *op = nullptr;
+    Declaration_listContext *declaration_list();
+    antlr4::tree::TerminalNode *COMMA();
+    std::vector<antlr4::tree::TerminalNode *> ID();
+    antlr4::tree::TerminalNode* ID(size_t i);
+    antlr4::tree::TerminalNode *ADDOP();
+    antlr4::tree::TerminalNode *MULOP();
+    antlr4::tree::TerminalNode *RELOP();
+    antlr4::tree::TerminalNode *LOGICOP();
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
   class  Dec_lstCommaThirdContext : public Declaration_listContext {
   public:
     Dec_lstCommaThirdContext(Declaration_listContext *ctx);
@@ -467,9 +504,13 @@ public:
   public:
     Dec_lstIDAddOpIDContext(Declaration_listContext *ctx);
 
+    antlr4::Token *op = nullptr;
     std::vector<antlr4::tree::TerminalNode *> ID();
     antlr4::tree::TerminalNode* ID(size_t i);
     antlr4::tree::TerminalNode *ADDOP();
+    antlr4::tree::TerminalNode *MULOP();
+    antlr4::tree::TerminalNode *RELOP();
+    antlr4::tree::TerminalNode *LOGICOP();
 
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
@@ -770,6 +811,17 @@ public:
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
+  class  LogicRelAssignContext : public Logic_expressionContext {
+  public:
+    LogicRelAssignContext(Logic_expressionContext *ctx);
+
+    Rel_expressionContext *rel_expression();
+    antlr4::tree::TerminalNode *LOGICOP();
+    antlr4::tree::TerminalNode *ASSIGNOP();
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
   class  LogciRelContext : public Logic_expressionContext {
   public:
     LogciRelContext(Logic_expressionContext *ctx);
@@ -810,6 +862,17 @@ public:
     RelSimpleContext(Rel_expressionContext *ctx);
 
     Simple_expressionContext *simple_expression();
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  RelSimpleRelAssignContext : public Rel_expressionContext {
+  public:
+    RelSimpleRelAssignContext(Rel_expressionContext *ctx);
+
+    Simple_expressionContext *simple_expression();
+    antlr4::tree::TerminalNode *RELOP();
+    antlr4::tree::TerminalNode *ASSIGNOP();
 
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
@@ -891,6 +954,17 @@ public:
     TermContext *term();
     antlr4::tree::TerminalNode *MULOP();
     Unary_expressionContext *unary_expression();
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  TermTermMulAssignContext : public TermContext {
+  public:
+    TermTermMulAssignContext(TermContext *ctx);
+
+    TermContext *term();
+    antlr4::tree::TerminalNode *MULOP();
+    antlr4::tree::TerminalNode *ASSIGNOP();
 
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };

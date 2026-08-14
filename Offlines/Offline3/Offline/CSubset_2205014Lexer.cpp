@@ -7,10 +7,10 @@
     extern std::ofstream lexLogFile;
 
 
-// Generated from CSubset.g4 by ANTLR 4.13.2
+// Generated from CSubset_2205014.g4 by ANTLR 4.13.2
 
 
-#include "CSubsetLexer.h"
+#include "CSubset_2205014Lexer.h"
 
 
 using namespace antlr4;
@@ -21,8 +21,8 @@ using namespace antlr4;
 
 namespace {
 
-struct CSubsetLexerStaticData final {
-  CSubsetLexerStaticData(std::vector<std::string> ruleNames,
+struct CSubset_2205014LexerStaticData final {
+  CSubset_2205014LexerStaticData(std::vector<std::string> ruleNames,
                           std::vector<std::string> channelNames,
                           std::vector<std::string> modeNames,
                           std::vector<std::string> literalNames,
@@ -32,10 +32,10 @@ struct CSubsetLexerStaticData final {
         symbolicNames(std::move(symbolicNames)),
         vocabulary(this->literalNames, this->symbolicNames) {}
 
-  CSubsetLexerStaticData(const CSubsetLexerStaticData&) = delete;
-  CSubsetLexerStaticData(CSubsetLexerStaticData&&) = delete;
-  CSubsetLexerStaticData& operator=(const CSubsetLexerStaticData&) = delete;
-  CSubsetLexerStaticData& operator=(CSubsetLexerStaticData&&) = delete;
+  CSubset_2205014LexerStaticData(const CSubset_2205014LexerStaticData&) = delete;
+  CSubset_2205014LexerStaticData(CSubset_2205014LexerStaticData&&) = delete;
+  CSubset_2205014LexerStaticData& operator=(const CSubset_2205014LexerStaticData&) = delete;
+  CSubset_2205014LexerStaticData& operator=(CSubset_2205014LexerStaticData&&) = delete;
 
   std::vector<antlr4::dfa::DFA> decisionToDFA;
   antlr4::atn::PredictionContextCache sharedContextCache;
@@ -49,21 +49,21 @@ struct CSubsetLexerStaticData final {
   std::unique_ptr<antlr4::atn::ATN> atn;
 };
 
-::antlr4::internal::OnceFlag csubsetlexerLexerOnceFlag;
+::antlr4::internal::OnceFlag csubset_2205014lexerLexerOnceFlag;
 #if ANTLR4_USE_THREAD_LOCAL_CACHE
 static thread_local
 #endif
-std::unique_ptr<CSubsetLexerStaticData> csubsetlexerLexerStaticData = nullptr;
+std::unique_ptr<CSubset_2205014LexerStaticData> csubset_2205014lexerLexerStaticData = nullptr;
 
-void csubsetlexerLexerInitialize() {
+void csubset_2205014lexerLexerInitialize() {
 #if ANTLR4_USE_THREAD_LOCAL_CACHE
-  if (csubsetlexerLexerStaticData != nullptr) {
+  if (csubset_2205014lexerLexerStaticData != nullptr) {
     return;
   }
 #else
-  assert(csubsetlexerLexerStaticData == nullptr);
+  assert(csubset_2205014lexerLexerStaticData == nullptr);
 #endif
-  auto staticData = std::make_unique<CSubsetLexerStaticData>(
+  auto staticData = std::make_unique<CSubset_2205014LexerStaticData>(
     std::vector<std::string>{
       "LINE_COMMENT", "BLOCK_COMMENT", "STRING", "WS", "IF", "ELSE", "FOR", 
       "WHILE", "PRINTLN", "RETURN", "INT", "FLOAT", "VOID", "LPAREN", "RPAREN", 
@@ -210,50 +210,50 @@ void csubsetlexerLexerInitialize() {
   for (size_t i = 0; i < count; i++) { 
     staticData->decisionToDFA.emplace_back(staticData->atn->getDecisionState(i), i);
   }
-  csubsetlexerLexerStaticData = std::move(staticData);
+  csubset_2205014lexerLexerStaticData = std::move(staticData);
 }
 
 }
 
-CSubsetLexer::CSubsetLexer(CharStream *input) : Lexer(input) {
-  CSubsetLexer::initialize();
-  _interpreter = new atn::LexerATNSimulator(this, *csubsetlexerLexerStaticData->atn, csubsetlexerLexerStaticData->decisionToDFA, csubsetlexerLexerStaticData->sharedContextCache);
+CSubset_2205014Lexer::CSubset_2205014Lexer(CharStream *input) : Lexer(input) {
+  CSubset_2205014Lexer::initialize();
+  _interpreter = new atn::LexerATNSimulator(this, *csubset_2205014lexerLexerStaticData->atn, csubset_2205014lexerLexerStaticData->decisionToDFA, csubset_2205014lexerLexerStaticData->sharedContextCache);
 }
 
-CSubsetLexer::~CSubsetLexer() {
+CSubset_2205014Lexer::~CSubset_2205014Lexer() {
   delete _interpreter;
 }
 
-std::string CSubsetLexer::getGrammarFileName() const {
-  return "CSubset.g4";
+std::string CSubset_2205014Lexer::getGrammarFileName() const {
+  return "CSubset_2205014.g4";
 }
 
-const std::vector<std::string>& CSubsetLexer::getRuleNames() const {
-  return csubsetlexerLexerStaticData->ruleNames;
+const std::vector<std::string>& CSubset_2205014Lexer::getRuleNames() const {
+  return csubset_2205014lexerLexerStaticData->ruleNames;
 }
 
-const std::vector<std::string>& CSubsetLexer::getChannelNames() const {
-  return csubsetlexerLexerStaticData->channelNames;
+const std::vector<std::string>& CSubset_2205014Lexer::getChannelNames() const {
+  return csubset_2205014lexerLexerStaticData->channelNames;
 }
 
-const std::vector<std::string>& CSubsetLexer::getModeNames() const {
-  return csubsetlexerLexerStaticData->modeNames;
+const std::vector<std::string>& CSubset_2205014Lexer::getModeNames() const {
+  return csubset_2205014lexerLexerStaticData->modeNames;
 }
 
-const dfa::Vocabulary& CSubsetLexer::getVocabulary() const {
-  return csubsetlexerLexerStaticData->vocabulary;
+const dfa::Vocabulary& CSubset_2205014Lexer::getVocabulary() const {
+  return csubset_2205014lexerLexerStaticData->vocabulary;
 }
 
-antlr4::atn::SerializedATNView CSubsetLexer::getSerializedATN() const {
-  return csubsetlexerLexerStaticData->serializedATN;
+antlr4::atn::SerializedATNView CSubset_2205014Lexer::getSerializedATN() const {
+  return csubset_2205014lexerLexerStaticData->serializedATN;
 }
 
-const atn::ATN& CSubsetLexer::getATN() const {
-  return *csubsetlexerLexerStaticData->atn;
+const atn::ATN& CSubset_2205014Lexer::getATN() const {
+  return *csubset_2205014lexerLexerStaticData->atn;
 }
 
 
-void CSubsetLexer::action(RuleContext *context, size_t ruleIndex, size_t actionIndex) {
+void CSubset_2205014Lexer::action(RuleContext *context, size_t ruleIndex, size_t actionIndex) {
   switch (ruleIndex) {
     case 0: LINE_COMMENTAction(antlrcpp::downCast<antlr4::RuleContext *>(context), actionIndex); break;
     case 1: BLOCK_COMMENTAction(antlrcpp::downCast<antlr4::RuleContext *>(context), actionIndex); break;
@@ -292,7 +292,7 @@ void CSubsetLexer::action(RuleContext *context, size_t ruleIndex, size_t actionI
   }
 }
 
-void CSubsetLexer::LINE_COMMENTAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::LINE_COMMENTAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 0: 
             writeIntoLexLogFile(
@@ -307,7 +307,7 @@ void CSubsetLexer::LINE_COMMENTAction(antlr4::RuleContext *context, size_t actio
   }
 }
 
-void CSubsetLexer::BLOCK_COMMENTAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::BLOCK_COMMENTAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 1: 
           // extra braces create a new scope for your variables
@@ -327,7 +327,7 @@ void CSubsetLexer::BLOCK_COMMENTAction(antlr4::RuleContext *context, size_t acti
   }
 }
 
-void CSubsetLexer::STRINGAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::STRINGAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 2: 
             writeIntoLexLogFile(
@@ -341,7 +341,7 @@ void CSubsetLexer::STRINGAction(antlr4::RuleContext *context, size_t actionIndex
   }
 }
 
-void CSubsetLexer::IFAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::IFAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 3:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <IF> Lexeme " + getText());  break;
 
@@ -350,7 +350,7 @@ void CSubsetLexer::IFAction(antlr4::RuleContext *context, size_t actionIndex) {
   }
 }
 
-void CSubsetLexer::ELSEAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::ELSEAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 4:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <ELSE> Lexeme " + getText());  break;
 
@@ -359,7 +359,7 @@ void CSubsetLexer::ELSEAction(antlr4::RuleContext *context, size_t actionIndex) 
   }
 }
 
-void CSubsetLexer::FORAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::FORAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 5:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <FOR> Lexeme " + getText());  break;
 
@@ -368,7 +368,7 @@ void CSubsetLexer::FORAction(antlr4::RuleContext *context, size_t actionIndex) {
   }
 }
 
-void CSubsetLexer::WHILEAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::WHILEAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 6:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <WHILE> Lexeme " + getText());  break;
 
@@ -377,7 +377,7 @@ void CSubsetLexer::WHILEAction(antlr4::RuleContext *context, size_t actionIndex)
   }
 }
 
-void CSubsetLexer::PRINTLNAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::PRINTLNAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 7:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <PRINTLN> Lexeme " + getText());  break;
 
@@ -386,7 +386,7 @@ void CSubsetLexer::PRINTLNAction(antlr4::RuleContext *context, size_t actionInde
   }
 }
 
-void CSubsetLexer::RETURNAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::RETURNAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 8:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <RETURN> Lexeme " + getText());  break;
 
@@ -395,7 +395,7 @@ void CSubsetLexer::RETURNAction(antlr4::RuleContext *context, size_t actionIndex
   }
 }
 
-void CSubsetLexer::INTAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::INTAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 9:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <INT> Lexeme " + getText());  break;
 
@@ -404,7 +404,7 @@ void CSubsetLexer::INTAction(antlr4::RuleContext *context, size_t actionIndex) {
   }
 }
 
-void CSubsetLexer::FLOATAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::FLOATAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 10:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <FLOAT> Lexeme " + getText());  break;
 
@@ -413,7 +413,7 @@ void CSubsetLexer::FLOATAction(antlr4::RuleContext *context, size_t actionIndex)
   }
 }
 
-void CSubsetLexer::VOIDAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::VOIDAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 11:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <VOID> Lexeme " + getText());  break;
 
@@ -422,7 +422,7 @@ void CSubsetLexer::VOIDAction(antlr4::RuleContext *context, size_t actionIndex) 
   }
 }
 
-void CSubsetLexer::LPARENAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::LPARENAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 12:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <LPAREN> Lexeme " + getText());  break;
 
@@ -431,7 +431,7 @@ void CSubsetLexer::LPARENAction(antlr4::RuleContext *context, size_t actionIndex
   }
 }
 
-void CSubsetLexer::RPARENAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::RPARENAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 13:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <RPAREN> Lexeme " + getText());  break;
 
@@ -440,7 +440,7 @@ void CSubsetLexer::RPARENAction(antlr4::RuleContext *context, size_t actionIndex
   }
 }
 
-void CSubsetLexer::LCURLAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::LCURLAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 14:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <LCURL> Lexeme " + getText());  break;
 
@@ -449,7 +449,7 @@ void CSubsetLexer::LCURLAction(antlr4::RuleContext *context, size_t actionIndex)
   }
 }
 
-void CSubsetLexer::RCURLAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::RCURLAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 15:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <RCURL> Lexeme " + getText());  break;
 
@@ -458,7 +458,7 @@ void CSubsetLexer::RCURLAction(antlr4::RuleContext *context, size_t actionIndex)
   }
 }
 
-void CSubsetLexer::LTHIRDAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::LTHIRDAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 16:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <LTHIRD> Lexeme " + getText());  break;
 
@@ -467,7 +467,7 @@ void CSubsetLexer::LTHIRDAction(antlr4::RuleContext *context, size_t actionIndex
   }
 }
 
-void CSubsetLexer::RTHIRDAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::RTHIRDAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 17:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <RTHIRD> Lexeme " + getText());  break;
 
@@ -476,7 +476,7 @@ void CSubsetLexer::RTHIRDAction(antlr4::RuleContext *context, size_t actionIndex
   }
 }
 
-void CSubsetLexer::SEMICOLONAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::SEMICOLONAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 18:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <SEMICOLON> Lexeme " + getText());  break;
 
@@ -485,7 +485,7 @@ void CSubsetLexer::SEMICOLONAction(antlr4::RuleContext *context, size_t actionIn
   }
 }
 
-void CSubsetLexer::COMMAAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::COMMAAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 19:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <COMMA> Lexeme " + getText());  break;
 
@@ -494,7 +494,7 @@ void CSubsetLexer::COMMAAction(antlr4::RuleContext *context, size_t actionIndex)
   }
 }
 
-void CSubsetLexer::ADDOPAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::ADDOPAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 20:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <ADDOP> Lexeme " + getText());  break;
 
@@ -503,7 +503,7 @@ void CSubsetLexer::ADDOPAction(antlr4::RuleContext *context, size_t actionIndex)
   }
 }
 
-void CSubsetLexer::MULOPAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::MULOPAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 21:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <MULOP> Lexeme " + getText());  break;
 
@@ -512,7 +512,7 @@ void CSubsetLexer::MULOPAction(antlr4::RuleContext *context, size_t actionIndex)
   }
 }
 
-void CSubsetLexer::INCOPAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::INCOPAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 22:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <INCOP> Lexeme " + getText());  break;
 
@@ -521,7 +521,7 @@ void CSubsetLexer::INCOPAction(antlr4::RuleContext *context, size_t actionIndex)
   }
 }
 
-void CSubsetLexer::DECOPAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::DECOPAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 23:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <DECOP> Lexeme " + getText());  break;
 
@@ -530,7 +530,7 @@ void CSubsetLexer::DECOPAction(antlr4::RuleContext *context, size_t actionIndex)
   }
 }
 
-void CSubsetLexer::NOTAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::NOTAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 24:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <NOT> Lexeme " + getText());  break;
 
@@ -539,7 +539,7 @@ void CSubsetLexer::NOTAction(antlr4::RuleContext *context, size_t actionIndex) {
   }
 }
 
-void CSubsetLexer::RELOPAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::RELOPAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 25:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <RELOP> Lexeme " + getText());  break;
 
@@ -548,7 +548,7 @@ void CSubsetLexer::RELOPAction(antlr4::RuleContext *context, size_t actionIndex)
   }
 }
 
-void CSubsetLexer::LOGICOPAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::LOGICOPAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 26:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <LOGICOP> Lexeme " + getText());  break;
 
@@ -557,7 +557,7 @@ void CSubsetLexer::LOGICOPAction(antlr4::RuleContext *context, size_t actionInde
   }
 }
 
-void CSubsetLexer::ASSIGNOPAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::ASSIGNOPAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 27:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <ASSIGNOP> Lexeme " + getText());  break;
 
@@ -566,7 +566,7 @@ void CSubsetLexer::ASSIGNOPAction(antlr4::RuleContext *context, size_t actionInd
   }
 }
 
-void CSubsetLexer::IDAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::IDAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 28:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <ID> Lexeme " + getText());  break;
 
@@ -575,7 +575,7 @@ void CSubsetLexer::IDAction(antlr4::RuleContext *context, size_t actionIndex) {
   }
 }
 
-void CSubsetLexer::CONST_INTAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::CONST_INTAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 29:  writeIntoLexLogFile("Line# " + std::to_string(getLine()) + ": Token <CONST_INT> Lexeme " + getText());  break;
 
@@ -584,7 +584,7 @@ void CSubsetLexer::CONST_INTAction(antlr4::RuleContext *context, size_t actionIn
   }
 }
 
-void CSubsetLexer::CONST_FLOATAction(antlr4::RuleContext *context, size_t actionIndex) {
+void CSubset_2205014Lexer::CONST_FLOATAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 30: 
             writeIntoLexLogFile(
@@ -612,10 +612,10 @@ void CSubsetLexer::CONST_FLOATAction(antlr4::RuleContext *context, size_t action
 
 
 
-void CSubsetLexer::initialize() {
+void CSubset_2205014Lexer::initialize() {
 #if ANTLR4_USE_THREAD_LOCAL_CACHE
-  csubsetlexerLexerInitialize();
+  csubset_2205014lexerLexerInitialize();
 #else
-  ::antlr4::internal::call_once(csubsetlexerLexerOnceFlag, csubsetlexerLexerInitialize);
+  ::antlr4::internal::call_once(csubset_2205014lexerLexerOnceFlag, csubset_2205014lexerLexerInitialize);
 #endif
 }

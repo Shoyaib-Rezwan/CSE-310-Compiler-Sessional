@@ -276,7 +276,7 @@
 //             }
 //         }
 //         string compound_statement = any_cast<string>(visit(ctx->compound_statement()));
-//         string matchStr = type_specifier + " " + ID + LPAREN + parameter_list + RPAREN + compound_statement;
+//         string matchStr = type_specifier + " " + ID + LPAREN + parameter_list + RPAREN + compound_statement + "\n";
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement\n\n";
 //         message = message + matchStr + "\n\n";
 //         writeIntoLogFile(message);
@@ -336,7 +336,7 @@
 
 //         string RPAREN = ctx->RPAREN()->getText();
 //         string compound_statement = any_cast<string>(visit(ctx->compound_statement()));
-//         string matchStr = type_specifier + " " + ID + LPAREN + RPAREN + compound_statement;
+//         string matchStr = type_specifier + " " + ID + LPAREN + RPAREN + compound_statement + "\n";
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": func_definition : type_specifier ID LPAREN RPAREN compound_statement\n\n";
 //         message = message + matchStr + "\n\n";
 //         writeIntoLogFile(message);
@@ -420,9 +420,9 @@
 //         string LCURL = ctx->LCURL()->getText();
 //         string statements = any_cast<string>(visit(ctx->statements()));
 //         string RCURL = ctx->RCURL()->getText();
-//         string matchStr = LCURL + "\n" + statements + "\n" + RCURL + "\n";
+//         string matchStr = LCURL + "\n" + statements + "\n" + RCURL;
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": compound_statement : LCURL statements RCURL\n\n";
-//         message = message + matchStr + "\n";
+//         message = message + matchStr + "\n\n";
 //         writeIntoLogFile(message);
 //         table->printAllScopes2(logFile);
 //         logFile << "\n\n";
@@ -434,9 +434,9 @@
 //     {
 //         string LCURL = ctx->LCURL()->getText();
 //         string RCURL = ctx->RCURL()->getText();
-//         string matchStr = LCURL + RCURL + "\n";
+//         string matchStr = LCURL + RCURL;
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": compound_statement : LCURL RCURL\n\n";
-//         message = message + matchStr + "\n";
+//         message = message + matchStr + "\n\n";
 //         writeIntoLogFile(message);
 //         table->printAllScopes2(logFile);
 //         logFile << "\n\n";
@@ -631,9 +631,9 @@
 //         string statement1 = any_cast<string>(visit(ctx->statement(0)));
 //         string ELSE = ctx->ELSE()->getText();
 //         string statement2 = any_cast<string>(visit(ctx->statement(1)));
-//         string matchStr = IF + LPAREN + expression + RPAREN + statement1 + ELSE + statement2;
+//         string matchStr = IF + " " + LPAREN + expression + RPAREN + statement1 + "\n" + ELSE + "\n" + statement2;
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": statement : IF LPAREN expression RPAREN statement ELSE statement\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n\n\n";
 //         writeIntoLogFile(message);
 //         return matchStr;
 //     }
@@ -645,9 +645,9 @@
 //         string expression = any_cast<string>(visit(ctx->expression()));
 //         string RPAREN = ctx->RPAREN()->getText();
 //         string statement = any_cast<string>(visit(ctx->statement()));
-//         string matchStr = WHILE + LPAREN + expression + RPAREN + statement;
+//         string matchStr = WHILE + " " + LPAREN + expression + RPAREN + statement;
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": statement : WHILE LPAREN expression RPAREN statement\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n\n\n";
 //         writeIntoLogFile(message);
 //         return matchStr;
 //     }
@@ -737,13 +737,12 @@
 //             errorCnt++;
 //         }
 
-//         // push it as an argument
+//         // get the type and push it in the parse tree
 //         if (s)
 //         {
 //             string dtype = s->getDtype();
-//             argTypes.push_back(dtype);
+//             exprTypes.put(ctx, dtype);
 //         }
-
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": variable : ID\n\n";
 //         message = message + matchStr + "\n\n";
 //         writeIntoLogFile(message);
@@ -778,6 +777,12 @@
 //             errorCnt++;
 //         }
 
+//         // put the type in the parse tree
+//         if (s)
+//         {
+//             string dtype = s->getDtype();
+//             exprTypes.put(ctx, dtype);
+//         }
 //         string matchStr = ID + LTHIRD + expression + RTHIRD;
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": variable : ID LTHIRD expression RTHIRD\n\n";
 //         message = message + matchStr + "\n\n";
@@ -817,7 +822,7 @@
 //             string numDtype = exprTypes.get(ctx->logic_expression());
 //             if (varDtype == "int" && numDtype == "FLOAT")
 //             {
-//                 string errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": Type Mismatch \n\n";
+//                 string errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": Type Mismatch\n\n";
 //                 errorFile << errMsg;
 //                 logFile << errMsg;
 //                 errorCnt++;
@@ -962,6 +967,20 @@
 //             logFile << errMsg;
 //             errorCnt++;
 //         }
+
+//         // put the dtype of this term
+//         string dtype1 = exprTypes.get(ctx->term());
+//         string dtype2 = exprTypes.get(ctx->unary_expression());
+
+//         if (MULOP != "%" && (equalsIgnoreCase(dtype1, "float") || equalsIgnoreCase(dtype2, "float")))
+//         {
+//             exprTypes.put(ctx, "FLOAT"); // assume % only return integer
+//         }
+//         else
+//         {
+//             exprTypes.put(ctx, "INT");
+//         }
+
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": term : term MULOP unary_expression\n\n";
 //         message = message + matchStr + "\n\n";
 //         writeIntoLogFile(message);
@@ -985,7 +1004,7 @@
 //         string NOT = ctx->NOT()->getText();
 //         string unary_expression = any_cast<string>(visit(ctx->unary_expression()));
 //         string matchStr = NOT + unary_expression;
-//         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": unary_expression : NOT unary_expression\n\n";
+//         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": unary_expression : NOT unary expression\n\n";
 //         message = message + matchStr + "\n\n";
 //         writeIntoLogFile(message);
 //         return matchStr;
@@ -1010,6 +1029,8 @@
 //         message = message + matchStr + "\n\n";
 //         writeIntoLogFile(message);
 
+//         // buuble up the type
+//         exprTypes.put(ctx, exprTypes.get(ctx->variable()));
 //         return matchStr;
 //     }
 
@@ -1088,9 +1109,6 @@
 //     {
 //         string matchStr = ctx->CONST_INT()->getText();
 
-//         // push it as agument
-//         argTypes.push_back("INT");
-
 //         exprTypes.put(ctx, "INT");
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": factor : CONST_INT\n\n";
 //         message = message + matchStr + "\n\n";
@@ -1106,8 +1124,6 @@
 //         stream << fixed << setprecision(2) << val;
 //         string matchStr = stream.str();
 //         exprTypes.put(ctx, "FLOAT");
-//         // push it as agument
-//         argTypes.push_back("FLOAT");
 
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": factor : CONST_FLOAT\n\n";
 //         message = message + matchStr + "\n\n";
@@ -1155,6 +1171,9 @@
 //         string arguments = any_cast<string>(visit(ctx->arguments()));
 //         string COMMA = ctx->COMMA()->getText();
 //         string logic_expression = any_cast<string>(visit(ctx->logic_expression()));
+//         // push the dtype of logic expression
+//         argTypes.push_back(exprTypes.get(ctx->logic_expression()));
+
 //         string matchStr = arguments + COMMA + logic_expression;
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": arguments : arguments COMMA logic_expression\n\n";
 //         message = message + matchStr + "\n\n";
@@ -1165,6 +1184,9 @@
 //     any visitArgsLogic(CSubsetParser::ArgsLogicContext *ctx) override
 //     {
 //         string matchStr = any_cast<string>(visit(ctx->logic_expression()));
+//         // push the dtype of logic expression
+//         argTypes.push_back(exprTypes.get(ctx->logic_expression()));
+
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": arguments : logic_expression\n\n";
 //         message = message + matchStr + "\n\n";
 //         writeIntoLogFile(message);
@@ -1182,7 +1204,7 @@
 //         // Added a space after IF to match target log output "if (c<a[0]){"
 //         string matchStr = IF + " " + LPAREN + expression + RPAREN + statement;
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": statement : IF LPAREN expression RPAREN statement\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n\n\n";
 //         writeIntoLogFile(message);
 
 //         return matchStr;
@@ -1201,7 +1223,7 @@
 
 //         string matchStr = FOR + LPAREN + expr_stmt1 + expr_stmt2 + expression + RPAREN + statement;
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": statement : FOR LPAREN expression_statement expression_statement expression RPAREN statement\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n\n\n";
 //         writeIntoLogFile(message);
 
 //         return matchStr;
@@ -1214,7 +1236,7 @@
 //         table->enterScope();
 //         string matchStr = any_cast<string>(visit(ctx->compound_statement()));
 //         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": statement : compound_statement\n\n";
-//         message = message + matchStr + "\n\n";
+//         message = message + matchStr + "\n\n\n";
 //         writeIntoLogFile(message);
 
 //         return matchStr;

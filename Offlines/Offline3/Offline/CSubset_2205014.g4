@@ -1,5 +1,5 @@
-grammar CSubset;
-import Lexer;
+grammar CSubset_2205014;
+import Lexer_2205014;
 
 start : program ;
 
@@ -25,11 +25,12 @@ func_definition
     ;
 
 parameter_list
-    : parameter_list COMMA type_specifier ID    # MultiParamDef
-    | parameter_list COMMA type_specifier       # MultiParamDec
-    | type_specifier ID                         # UniParamDef
-    | type_specifier                            # UniParamDec
-    | type_specifier ADDOP                      # UniParamAddOp         // for error handle line foo(int -)
+    : parameter_list COMMA type_specifier ID                                # MultiParamDef
+    | parameter_list COMMA type_specifier                                   # MultiParamDec
+    | type_specifier ID                                                     # UniParamDef
+    | type_specifier                                                        # UniParamDec
+    | parameter_list COMMA type_specifier op=(ADDOP|MULOP|RELOP|LOGICOP)    # MultiParamADDOP       // for error handle var(int a, int - , int b)
+    | type_specifier op=(ADDOP|MULOP|RELOP|LOGICOP)                         # UniParamAddOp         // for error handle line foo(int -)
     ;
 
 compound_statement
@@ -51,7 +52,8 @@ declaration_list
     | declaration_list COMMA ID LTHIRD CONST_INT RTHIRD # Dec_lstCommaThird
     | ID                                                # Dec_lstID   
     | ID LTHIRD CONST_INT RTHIRD                        # Dec_lstThird
-    | ID ADDOP ID                                       # Dec_lstIDAddOpID // error int x-y
+    | declaration_list COMMA ID op=(ADDOP|MULOP|RELOP|LOGICOP) ID                # Dec_lstCOMMAIDAddopID // error int p, q-r, s;
+    | ID op=(ADDOP|MULOP|RELOP|LOGICOP) ID                                       # Dec_lstIDAddOpID // error int x-y, z;
     ;
 
 statements
@@ -66,9 +68,9 @@ statement
     | WHILE LPAREN expression RPAREN statement                                          # StmtWhile
     | PRINTLN LPAREN ID RPAREN SEMICOLON                                                # StmtPrint
     | RETURN expression SEMICOLON                                                       # StmtReturn
-    | compound_statement                                                                # StmtCmpd_stmt    // added rule for blocks
-    | FOR LPAREN expression_statement expression_statement expression RPAREN statement  # StmtFor // added rule for for
-    | IF LPAREN expression RPAREN statement                                             # StmtIf // added rule for single if
+    | compound_statement                                                                # StmtCmpd_stmt
+    | FOR LPAREN expression_statement expression_statement expression RPAREN statement  # StmtFor
+    | IF LPAREN expression RPAREN statement                                             # StmtIf
     ;
 
 expression_statement
@@ -90,11 +92,13 @@ expression
 logic_expression
     : rel_expression                        # LogciRel
     | rel_expression LOGICOP rel_expression # LogicRelRel
+    | rel_expression LOGICOP ASSIGNOP       # LogicRelAssign
     ;
 
 rel_expression
     : simple_expression                         # RelSimple
     | simple_expression RELOP simple_expression # RelSimpleSimple
+    | simple_expression RELOP ASSIGNOP          # RelSimpleRelAssign // error: a = b <= 5
     ;
 
 simple_expression
@@ -106,6 +110,7 @@ simple_expression
 term
     : unary_expression              # TermUnary
     | term MULOP unary_expression   # TermTerm
+    | term MULOP ASSIGNOP           # TermTermMulAssign     // error z = 3 * =
     ;
 
 unary_expression
