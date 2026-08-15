@@ -606,6 +606,28 @@ public:
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
+  class  StmtPrintErrContext : public StatementContext {
+  public:
+    StmtPrintErrContext(StatementContext *ctx);
+
+    antlr4::tree::TerminalNode *PRINTLN();
+    antlr4::tree::TerminalNode *LPAREN();
+    antlr4::tree::TerminalNode *ID();
+    antlr4::tree::TerminalNode *RPAREN();
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  StmtReturnErrContext : public StatementContext {
+  public:
+    StmtReturnErrContext(StatementContext *ctx);
+
+    antlr4::tree::TerminalNode *RETURN();
+    ExpressionContext *expression();
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
   class  StmtVar_decContext : public StatementContext {
   public:
     StmtVar_decContext(StatementContext *ctx);

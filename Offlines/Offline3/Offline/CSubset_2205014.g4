@@ -71,6 +71,8 @@ statement
     | compound_statement                                                                # StmtCmpd_stmt
     | FOR LPAREN expression_statement expression_statement expression RPAREN statement  # StmtFor
     | IF LPAREN expression RPAREN statement                                             # StmtIf
+    | PRINTLN LPAREN ID RPAREN                                                          # stmtPrintErr // error: printf(a)
+    | RETURN expression                                                                 # stmtReturnErr // error: return a
     ;
 
 expression_statement

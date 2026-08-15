@@ -97,6 +97,10 @@ public:
 
     virtual std::any visitStmtIf(CSubset_2205014Parser::StmtIfContext *context) = 0;
 
+    virtual std::any visitStmtPrintErr(CSubset_2205014Parser::StmtPrintErrContext *context) = 0;
+
+    virtual std::any visitStmtReturnErr(CSubset_2205014Parser::StmtReturnErrContext *context) = 0;
+
     virtual std::any visitExpr_stmtSemicolon(CSubset_2205014Parser::Expr_stmtSemicolonContext *context) = 0;
 
     virtual std::any visitExpr_stmtExprSemicolon(CSubset_2205014Parser::Expr_stmtExprSemicolonContext *context) = 0;

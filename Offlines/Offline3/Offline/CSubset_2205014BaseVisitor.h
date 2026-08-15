@@ -171,6 +171,14 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitStmtPrintErr(CSubset_2205014Parser::StmtPrintErrContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitStmtReturnErr(CSubset_2205014Parser::StmtReturnErrContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitExpr_stmtSemicolon(CSubset_2205014Parser::Expr_stmtSemicolonContext *ctx) override {
     return visitChildren(ctx);
   }

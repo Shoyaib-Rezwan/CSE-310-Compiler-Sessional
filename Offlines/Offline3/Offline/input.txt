@@ -1,6 +1,5 @@
-int a(int a, int b);
-
-int main()
-{
-
+int foo(int a);
+int foo(float a){
+    printf(x)
+    return 1.25
 }

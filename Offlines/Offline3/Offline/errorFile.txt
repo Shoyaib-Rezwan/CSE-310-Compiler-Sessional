@@ -1,2 +1,8 @@
-Error at line 2: a is not a function
+Error at line 2: 1th parameter's type mismatch at function definition of foo
+
+Error at line 3: Undeclared variable x
+
+Error at line 3: syntax error, missing ';' after expression 'printf(x)'
+
+Error at line 4: syntax error, missing ';' after expression 'return 1.25'
 

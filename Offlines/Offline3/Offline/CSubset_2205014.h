@@ -145,12 +145,14 @@ public:
     {
         string type_specifier = any_cast<string>(visit(ctx->type_specifier()));
         string ID = ctx->ID()->getText();
+        bool multiDeclarationError = false;
         if (!table->insert(ID, "ID", type_specifier, false, false))
         {
             string errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": Multiple declaration of " + ID + "\n\n";
             errorFile << errMsg;
             logFile << errMsg;
             errorCnt++;
+            multiDeclarationError = true;
         }
         // set isFunction
         SymbolInfo *s = lookup(ID);
@@ -166,8 +168,9 @@ public:
         string parameter_list = any_cast<string>(visit(ctx->parameter_list()));
 
         // as have got the parameters, just store them inside the symbol Info
-
-        s->setParamTypes(paramTypes);
+        // only if the function is not previously declared
+        if (!multiDeclarationError)
+            s->setParamTypes(paramTypes);
 
         string RPAREN = ctx->RPAREN()->getText();
         string SEMICOLON = ctx->SEMICOLON()->getText();
@@ -213,6 +216,8 @@ public:
         string type_specifier = any_cast<string>(visit(ctx->type_specifier()));
         string ID = ctx->ID()->getText();
 
+        bool previouslyPushed = false;
+        bool multipleDeclaration = false;
         string errMsg = "";
         bool checkParamNumbers = false; // this declaration has potential for causing param number error
         if (!table->insert(ID, "ID", type_specifier))
@@ -226,9 +231,10 @@ public:
             {
                 errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": Multiple declaration of " + ID + "\n\n";
                 errorCnt++;
+                multipleDeclaration = true;
             }
             // now handle return type mismatch between definition and declaration
-            if (!s->getIsDefined() && s->getDtype() != type_specifier)
+            if (!s->getIsDefined() && !equalsIgnoreCase(s->getDtype(), type_specifier))
             {
                 errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": Return type mismatch with function declaration in function " + ID + "\n\n";
                 errorCnt++;
@@ -240,6 +246,7 @@ public:
                 checkParamNumbers = true;
             }
             s->setIsDefined(true);
+            previouslyPushed = true;
         }
         SymbolInfo *s = lookup(ID);
         s->setIsFunction();
@@ -267,7 +274,8 @@ public:
             logFile << errMsg;
             errorCnt++;
         }
-        s->setParamTypes(paramTypes);
+        if (!previouslyPushed)
+            s->setParamTypes(paramTypes);
 
         string RPAREN = ctx->RPAREN()->getText();
         // handle errors where param types are not given
@@ -275,7 +283,20 @@ public:
         {
             if (paramTypes[i] == "#")
             {
-                errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": " + to_string(i + 1) + "th parameter's name not given in function definition of var\n\n";
+                errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": " + to_string(i + 1) + "th parameter's name not given in function definition of " + ID + "\n\n";
+                errorFile << errMsg;
+                logFile << errMsg;
+                errorCnt++;
+            }
+        }
+
+        // handle parameter list mismatch with declared and defined versions
+        vector<string> actualParams = s->getParamTypes();
+        for (int i = 0; i < min(actualParams.size(), paramTypes.size()); i++)
+        {
+            if (!equalsIgnoreCase(actualParams[i], paramTypes[i]))
+            {
+                errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": " + to_string(i + 1) + "th parameter's type mismatch at function definition of " + ID + "\n\n";
                 errorFile << errMsg;
                 logFile << errMsg;
                 errorCnt++;
@@ -321,6 +342,7 @@ public:
                 checkParamNumbers = true;
             }
             s->setIsDefined(true);
+
             errorFile << errMsg;
             logFile << errMsg;
         }
@@ -1436,5 +1458,52 @@ public:
         errorCnt++;
 
         return rel_expression;
+    }
+    any visitStmtReturnErr(CSubset_2205014Parser::StmtReturnErrContext *ctx) override
+    {
+        string RETURN = ctx->RETURN()->getText();
+        string expression = any_cast<string>(visit(ctx->expression()));
+
+        string matchStr = RETURN + " " + expression;
+        string errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": syntax error, missing ';' after expression '" + matchStr + "'\n\n";
+        errorFile << errMsg;
+        logFile << errMsg;
+        errorCnt++;
+
+        string message = "Line " + to_string(ctx->getStart()->getLine()) + ": statement : RETURN expression (missing SEMICOLON)\n\n";
+        message = message + matchStr + "\n\n";
+        writeIntoLogFile(message);
+
+        return matchStr;
+    }
+    any visitStmtPrintErr(CSubset_2205014Parser::StmtPrintErrContext *ctx) override
+    {
+        string PRINTLN = ctx->PRINTLN()->getText();
+        string LPAREN = ctx->LPAREN()->getText();
+        string RPAREN = ctx->RPAREN()->getText();
+        string ID = ctx->ID()->getText();
+
+        string matchStr = PRINTLN + LPAREN + ID + RPAREN;
+        
+        // undeclared variable
+        SymbolInfo *s = lookup(ID);
+        if (s == nullptr)
+        {
+            string errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": Undeclared variable " + ID + "\n\n";
+            errorFile << errMsg;
+            logFile << errMsg;
+            errorCnt++;
+        }
+
+        string errMsg = "Error at line " + to_string(ctx->getStart()->getLine()) + ": syntax error, missing ';' after expression '" + matchStr + "'\n\n";
+        errorFile << errMsg;
+        logFile << errMsg;
+        errorCnt++;
+
+        string message = "Line " + to_string(ctx->getStart()->getLine()) + ": statement : PRINTLN LPAREN ID RPAREN (missing SEMICOLON)\n\n";
+        message = message + matchStr + "\n\n";
+        writeIntoLogFile(message);
+
+        return matchStr;
     }
 };

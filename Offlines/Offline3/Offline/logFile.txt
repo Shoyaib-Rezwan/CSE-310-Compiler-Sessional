@@ -2,250 +2,138 @@ Line 1: type_specifier : INT
 
 int
 
-Line 1: type_specifier : FLOAT
+Line 1: type_specifier : INT
 
-float
+int
 
 Line 1: parameter_list : type_specifier ID
 
-float a
+int a
 
-Line 2: factor : CONST_FLOAT
+Line 1: func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
 
-2.50
-
-Line 2: unary_expression : factor
-
-2.50
-
-Line 2: term : unary_expression
-
-2.50
-
-Line 2: simple_expression : term
-
-2.50
-
-Line 2: rel_expression : simple_expression
-
-2.50
-
-Line 2: logic_expression : rel_expression
-
-2.50
-
-Line 2: arguments : logic_expression
-
-2.50
-
-Line 2: argument_list : arguments
-
-2.50
-
-Error at line 2: a is not a function
-
-Line 2: factor : ID LPAREN argument_list RPAREN
-
-a(2.50)
-
-Line 2: unary_expression : factor
-
-a(2.50)
-
-Line 2: term : unary_expression
-
-a(2.50)
-
-Line 2: simple_expression : term
-
-a(2.50)
-
-Line 2: rel_expression : simple_expression
-
-a(2.50)
-
-Line 2: logic_expression : rel_expression
-
-a(2.50)
-
-Line 2: expression : logic expression
-
-a(2.50)
-
-Line 2: expression_statement : expression SEMICOLON
-
-a(2.50);
-
-Line 2: statement : expression_statement
-
-a(2.50);
+int foo(int a);
 
 
-Line 2: statements : statement
+Line 1: unit : func_declaration
 
-a(2.50);
-
-
-Line 1: compound_statement : LCURL statements RCURL
-
-{
-a(2.50);
-}
-
-
-
-
-ScopeTable # 1.1
- 7 --> < a , ID > 
-
-
-
-ScopeTable # 1
- 7 --> < a , ID > 
-
-
-Line 1: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
-
-int a(float a){
-a(2.50);
-}
-
-
-Line 1: unit : func_definition
-
-int a(float a){
-a(2.50);
-}
-
+int foo(int a);
 
 
 Line 1: program : unit
 
-int a(float a){
-a(2.50);
-}
+int foo(int a);
 
 
-
-Line 4: type_specifier : INT
+Line 2: type_specifier : INT
 
 int
 
-Line 6: factor : CONST_FLOAT
+Line 2: type_specifier : FLOAT
 
-2.50
+float
 
-Line 6: unary_expression : factor
+Line 2: parameter_list : type_specifier ID
 
-2.50
+float a
 
-Line 6: term : unary_expression
+Error at line 2: 1th parameter's type mismatch at function definition of foo
 
-2.50
+Error at line 3: Undeclared variable x
 
-Line 6: simple_expression : term
+Error at line 3: syntax error, missing ';' after expression 'printf(x)'
 
-2.50
+Line 3: statement : PRINTLN LPAREN ID RPAREN (missing SEMICOLON)
 
-Line 6: rel_expression : simple_expression
+printf(x)
 
-2.50
+Line 3: statements : statement
 
-Line 6: logic_expression : rel_expression
-
-2.50
-
-Line 6: arguments : logic_expression
-
-2.50
-
-Line 6: argument_list : arguments
-
-2.50
-
-Line 6: factor : ID LPAREN argument_list RPAREN
-
-a(2.50)
-
-Line 6: unary_expression : factor
-
-a(2.50)
-
-Line 6: term : unary_expression
-
-a(2.50)
-
-Line 6: simple_expression : term
-
-a(2.50)
-
-Line 6: rel_expression : simple_expression
-
-a(2.50)
-
-Line 6: logic_expression : rel_expression
-
-a(2.50)
-
-Line 6: expression : logic expression
-
-a(2.50)
-
-Line 6: expression_statement : expression SEMICOLON
-
-a(2.50);
-
-Line 6: statement : expression_statement
-
-a(2.50);
+printf(x)
 
 
-Line 6: statements : statement
+Line 4: factor : CONST_FLOAT
 
-a(2.50);
+1.25
+
+Line 4: unary_expression : factor
+
+1.25
+
+Line 4: term : unary_expression
+
+1.25
+
+Line 4: simple_expression : term
+
+1.25
+
+Line 4: rel_expression : simple_expression
+
+1.25
+
+Line 4: logic_expression : rel_expression
+
+1.25
+
+Line 4: expression : logic expression
+
+1.25
+
+Error at line 4: syntax error, missing ';' after expression 'return 1.25'
+
+Line 4: statement : RETURN expression (missing SEMICOLON)
+
+return 1.25
+
+Line 4: statements : statements statement
+
+printf(x)
+return 1.25
 
 
-Line 5: compound_statement : LCURL statements RCURL
+Line 2: compound_statement : LCURL statements RCURL
 
 {
-a(2.50);
+printf(x)
+return 1.25
 }
 
 
 
 
 ScopeTable # 1.2
+ 7 --> < a , ID > 
 
 
 
 ScopeTable # 1
- 1 --> < main , ID > 
- 7 --> < a , ID > 
+ 24 --> < foo , ID > 
 
 
-Line 4: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+Line 2: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
 
-int main(){
-a(2.50);
+int foo(float a){
+printf(x)
+return 1.25
 }
 
 
-Line 4: unit : func_definition
+Line 2: unit : func_definition
 
-int main(){
-a(2.50);
+int foo(float a){
+printf(x)
+return 1.25
 }
 
 
 
-Line 4: program : program unit
+Line 2: program : program unit
 
-int a(float a){
-a(2.50);
-}
-
-int main(){
-a(2.50);
+int foo(int a);
+int foo(float a){
+printf(x)
+return 1.25
 }
 
 
@@ -255,10 +143,9 @@ Line 1: start : program
 
 
 ScopeTable # 1
- 1 --> < main , ID > 
- 7 --> < a , ID > 
+ 24 --> < foo , ID > 
 
 
-Total lines: 7
-Total errors: 1
+Total lines: 5
+Total errors: 4
 
