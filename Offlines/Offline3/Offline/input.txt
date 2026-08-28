@@ -1,5 +1,16 @@
-int foo(int a);
-int foo(float a){
-    printf(x)
-    return 1.25
+
+int main() {
+    int a;
+    int b;
+    
+    a = 10;
+    
+    // 1. Triggers Redundant Math: ADD x, 0 and IMUL x, 1
+    a = a + 0;
+    a = a * 1;
+
+    // 2. Triggers Redundant MOV Store/Load Pair
+    b = a;
+
+    return 0;
 }

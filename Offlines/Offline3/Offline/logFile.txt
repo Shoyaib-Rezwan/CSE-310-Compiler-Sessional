@@ -1,151 +1,408 @@
-Line 1: type_specifier : INT
-
-int
-
-Line 1: type_specifier : INT
-
-int
-
-Line 1: parameter_list : type_specifier ID
-
-int a
-
-Line 1: func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
-
-int foo(int a);
-
-
-Line 1: unit : func_declaration
-
-int foo(int a);
-
-
-Line 1: program : unit
-
-int foo(int a);
-
-
 Line 2: type_specifier : INT
 
 int
 
-Line 2: type_specifier : FLOAT
+Line 3: type_specifier : INT
 
-float
+int
 
-Line 2: parameter_list : type_specifier ID
+Line 3: declaration_list : ID
 
-float a
+a
 
-Error at line 2: 1th parameter's type mismatch at function definition of foo
+Line 3: var_declaration : type_specifier declaration_list SEMICOLON
 
-Error at line 3: Undeclared variable x
+int a;
 
-Error at line 3: syntax error, missing ';' after expression 'printf(x)'
+Line 3: statement : var_declaration
 
-Line 3: statement : PRINTLN LPAREN ID RPAREN (missing SEMICOLON)
+int a;
 
-printf(x)
 
 Line 3: statements : statement
 
-printf(x)
+int a;
 
 
-Line 4: factor : CONST_FLOAT
+Line 4: type_specifier : INT
 
-1.25
+int
 
-Line 4: unary_expression : factor
+Line 4: declaration_list : ID
 
-1.25
+b
 
-Line 4: term : unary_expression
+Line 4: var_declaration : type_specifier declaration_list SEMICOLON
 
-1.25
+int b;
 
-Line 4: simple_expression : term
+Line 4: statement : var_declaration
 
-1.25
+int b;
 
-Line 4: rel_expression : simple_expression
-
-1.25
-
-Line 4: logic_expression : rel_expression
-
-1.25
-
-Line 4: expression : logic expression
-
-1.25
-
-Error at line 4: syntax error, missing ';' after expression 'return 1.25'
-
-Line 4: statement : RETURN expression (missing SEMICOLON)
-
-return 1.25
 
 Line 4: statements : statements statement
 
-printf(x)
-return 1.25
+int a;
+int b;
+
+
+Line 6: variable : ID
+
+a
+
+Line 6: factor : CONST_INT
+
+10
+
+Line 6: unary_expression : factor
+
+10
+
+Line 6: term : unary_expression
+
+10
+
+Line 6: simple_expression : term
+
+10
+
+Line 6: rel_expression : simple_expression
+
+10
+
+Line 6: logic_expression : rel_expression
+
+10
+
+Line 6: expression : variable ASSIGNOP logic_expression
+
+a=10
+
+Line 6: expression_statement : expression SEMICOLON
+
+a=10;
+
+Line 6: statement : expression_statement
+
+a=10;
+
+
+Line 6: statements : statements statement
+
+int a;
+int b;
+a=10;
+
+
+Line 9: variable : ID
+
+a
+
+Line 9: variable : ID
+
+a
+
+Line 9: factor : variable
+
+a
+
+Line 9: unary_expression : factor
+
+a
+
+Line 9: term : unary_expression
+
+a
+
+Line 9: simple_expression : term
+
+a
+
+Line 9: factor : CONST_INT
+
+0
+
+Line 9: unary_expression : factor
+
+0
+
+Line 9: term : unary_expression
+
+0
+
+Line 9: simple_expression : simple_expression ADDOP term
+
+a+0
+
+Line 9: rel_expression : simple_expression
+
+a+0
+
+Line 9: logic_expression : rel_expression
+
+a+0
+
+Line 9: expression : variable ASSIGNOP logic_expression
+
+a=a+0
+
+Line 9: expression_statement : expression SEMICOLON
+
+a=a+0;
+
+Line 9: statement : expression_statement
+
+a=a+0;
+
+
+Line 9: statements : statements statement
+
+int a;
+int b;
+a=10;
+a=a+0;
+
+
+Line 10: variable : ID
+
+a
+
+Line 10: variable : ID
+
+a
+
+Line 10: factor : variable
+
+a
+
+Line 10: unary_expression : factor
+
+a
+
+Line 10: term : unary_expression
+
+a
+
+Line 10: factor : CONST_INT
+
+1
+
+Line 10: unary_expression : factor
+
+1
+
+Line 10: term : term MULOP unary_expression
+
+a*1
+
+Line 10: simple_expression : term
+
+a*1
+
+Line 10: rel_expression : simple_expression
+
+a*1
+
+Line 10: logic_expression : rel_expression
+
+a*1
+
+Line 10: expression : variable ASSIGNOP logic_expression
+
+a=a*1
+
+Line 10: expression_statement : expression SEMICOLON
+
+a=a*1;
+
+Line 10: statement : expression_statement
+
+a=a*1;
+
+
+Line 10: statements : statements statement
+
+int a;
+int b;
+a=10;
+a=a+0;
+a=a*1;
+
+
+Line 13: variable : ID
+
+b
+
+Line 13: variable : ID
+
+a
+
+Line 13: factor : variable
+
+a
+
+Line 13: unary_expression : factor
+
+a
+
+Line 13: term : unary_expression
+
+a
+
+Line 13: simple_expression : term
+
+a
+
+Line 13: rel_expression : simple_expression
+
+a
+
+Line 13: logic_expression : rel_expression
+
+a
+
+Line 13: expression : variable ASSIGNOP logic_expression
+
+b=a
+
+Line 13: expression_statement : expression SEMICOLON
+
+b=a;
+
+Line 13: statement : expression_statement
+
+b=a;
+
+
+Line 13: statements : statements statement
+
+int a;
+int b;
+a=10;
+a=a+0;
+a=a*1;
+b=a;
+
+
+Line 15: factor : CONST_INT
+
+0
+
+Line 15: unary_expression : factor
+
+0
+
+Line 15: term : unary_expression
+
+0
+
+Line 15: simple_expression : term
+
+0
+
+Line 15: rel_expression : simple_expression
+
+0
+
+Line 15: logic_expression : rel_expression
+
+0
+
+Line 15: expression : logic expression
+
+0
+
+Line 15: statement : RETURN expression SEMICOLON
+
+return 0;
+
+
+Line 15: statements : statements statement
+
+int a;
+int b;
+a=10;
+a=a+0;
+a=a*1;
+b=a;
+return 0;
 
 
 Line 2: compound_statement : LCURL statements RCURL
 
 {
-printf(x)
-return 1.25
+int a;
+int b;
+a=10;
+a=a+0;
+a=a*1;
+b=a;
+return 0;
 }
 
 
 
 
-ScopeTable # 1.2
+ScopeTable # 1.1
  7 --> < a , ID > 
+ 8 --> < b , ID > 
 
 
 
 ScopeTable # 1
- 24 --> < foo , ID > 
+ 1 --> < main , ID > 
 
 
-Line 2: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
+Line 2: func_definition : type_specifier ID LPAREN RPAREN compound_statement
 
-int foo(float a){
-printf(x)
-return 1.25
+int main(){
+int a;
+int b;
+a=10;
+a=a+0;
+a=a*1;
+b=a;
+return 0;
 }
 
 
 Line 2: unit : func_definition
 
-int foo(float a){
-printf(x)
-return 1.25
+int main(){
+int a;
+int b;
+a=10;
+a=a+0;
+a=a*1;
+b=a;
+return 0;
 }
 
 
 
-Line 2: program : program unit
+Line 2: program : unit
 
-int foo(int a);
-int foo(float a){
-printf(x)
-return 1.25
+int main(){
+int a;
+int b;
+a=10;
+a=a+0;
+a=a*1;
+b=a;
+return 0;
 }
 
 
 
-Line 1: start : program
+Line 2: start : program
 
 
 
 ScopeTable # 1
- 24 --> < foo , ID > 
+ 1 --> < main , ID > 
 
 
-Total lines: 5
-Total errors: 4
+Total lines: 16
+Total errors: 0
 

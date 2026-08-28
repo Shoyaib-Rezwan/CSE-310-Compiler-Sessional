@@ -1632,7 +1632,7 @@ public:
             fetchRight = "\tMOV EAX, " + unary_expression + "\t\t; Line " + to_string(ctx->getStart()->getLine()) + "\n";
         }
         fetchRight = fetchRight.append("\tMOV ECX, EAX\n");
-        string operation = (MULOP == "*") ? "\tCWD\n\tMUL" : "\tCWD\n\tDIV";
+        string operation = (MULOP == "*") ? "\tIMUL" : "\tCDQ\n\tIDIV";
         operation.append(" ECX\n");
         string pushEAX = (MULOP == "%") ? "\tPUSH EDX\n" : "\tPUSH EAX\n";
         string asmCode = fetchRight + fetchLeft + operation + pushEAX;
@@ -1843,6 +1843,25 @@ public:
         string expression = any_cast<string>(visit(ctx->expression()));
         string RPAREN = ctx->RPAREN()->getText();
         string matchStr = LPAREN + expression + RPAREN;
+
+        // offline 4
+        if (!fetchFromStack)
+        {
+            SymbolInfo *s = lookup(expression);
+            string fetchExpr = "";
+            if (s)
+            {
+                string src = s->getStkOffset() ? "[EBP-" + to_string(s->getStkOffset()) + "]" : "[" + expression + "]";
+                fetchExpr = "\tMOV EAX, " + src + "\t\t; Line " + to_string(ctx->getStart()->getLine()) + "\n";
+            }
+            else
+            {
+                fetchExpr = "\tMOV EAX, " + expression + "\t\t; Line " + to_string(ctx->getStart()->getLine()) + "\n";
+            }
+            writeIntoTempFile(fetchExpr + "\tPUSH EAX\n");
+            fetchFromStack = true;
+        }
+        // offline 4
         string message = "Line " + to_string(ctx->getStart()->getLine()) + ": factor : LPAREN expression RPAREN\n\n";
         message = message + matchStr + "\n\n";
         writeIntoLogFile(message);
