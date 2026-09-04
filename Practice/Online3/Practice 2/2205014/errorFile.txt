@@ -1,0 +1,2 @@
+Error at line 20: syntax error, missing ';' after expression '12'
+

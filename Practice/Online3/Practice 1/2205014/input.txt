@@ -1,0 +1,14 @@
+int a,b;
+int main(){
+ 
+	int x,y;
+ 
+	a=x=b=y=2*3+9;
+    
+    println(a);
+    println(x);
+    println(b);
+    println(y);
+	return 0;
+}
+
