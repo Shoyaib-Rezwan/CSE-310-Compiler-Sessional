@@ -1,0 +1,9 @@
+int main() {
+int a;
+a = 10;
+a += 5;
+println(a);
+a *= 2;
+println(a);
+return 0;
+}
